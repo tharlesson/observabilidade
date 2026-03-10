@@ -1,16 +1,16 @@
-﻿# Sample App Node
+﻿# App de exemplo em Node
 
-- Exposes `/metrics` in Prometheus format.
-- Exports traces/metrics to OTLP via gRPC.
+- Expoe `/metrics` no formato Prometheus.
+- Exporta traces/metricas para OTLP via gRPC.
 
-## Run locally
+## Executar localmente
 
 ```bash
 npm install
 npm start
 ```
 
-Environment variables:
+Variaveis de ambiente:
 - `OTEL_EXPORTER_OTLP_ENDPOINT`
 - `OTEL_SERVICE_NAME`
 - `ENVIRONMENT`

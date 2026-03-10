@@ -1,32 +1,32 @@
-﻿# Security Baseline
+﻿# Baseline de seguranca
 
-## Identity and Access
+## Identidade e acesso
 
-- IRSA on EKS for ADOT collector.
-- ECS task role for ADOT collector.
-- EC2 instance profile for node_exporter/collector bootstrap.
-- AMP write permissions scoped to workspace ARN whenever possible.
+- IRSA no EKS para o collector ADOT.
+- Task role do ECS para o collector ADOT.
+- Instance profile no EC2 para bootstrap de node_exporter/collector.
+- Permissoes de escrita no AMP escopadas ao ARN do workspace sempre que possivel.
 
 ## Secrets
 
-- No secrets stored in repository.
-- Use `.env` for local lab only.
-- Prefer AWS SSM Parameter Store or Secrets Manager for production.
+- Nenhum segredo armazenado no repositorio.
+- Use `.env` somente no laboratorio local.
+- Em producao, prefira AWS SSM Parameter Store ou Secrets Manager.
 
-## Network Controls
+## Controles de rede
 
-- Kubernetes NetworkPolicy baseline in observability namespace.
-- Security groups for ECS collectors restricted to required egress.
-- Blackbox endpoints should be allowlisted explicitly.
+- Baseline de NetworkPolicy no namespace de observabilidade.
+- Security groups dos collectors no ECS restritos ao egress necessario.
+- Endpoints do blackbox devem ser explicitamente allowlisted.
 
-## Transport Security
+## Seguranca de transporte
 
-- TLS examples for Prometheus, Grafana, Alertmanager in local lab.
-- Use managed certificates/ingress TLS termination in AWS production.
+- Exemplos TLS para Prometheus, Grafana e Alertmanager no laboratorio local.
+- Em producao AWS, use certificados gerenciados e terminacao TLS no ingress.
 
-## Hardening TODOs for Production
+## Hardening recomendado para producao
 
-- Replace self-signed certs with ACM/public or private CA certs.
-- Use WAF + private ingress for Grafana/Alertmanager.
-- Enforce SSO/OIDC in Grafana.
-- Add image signing verification and admission policies.
+- Substituir certificados self-signed por certificados ACM/publicos/CA privada.
+- Usar WAF + ingress privado para Grafana/Alertmanager.
+- Forcar SSO/OIDC no Grafana.
+- Adicionar verificacao de assinatura de imagem e politicas de admissao.

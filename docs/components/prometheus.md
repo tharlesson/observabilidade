@@ -1,13 +1,13 @@
-﻿# Component: Prometheus
+﻿# Componente: Prometheus
 
-## Purpose
+## Finalidade
 
-- Scrape metrics from exporters/apps.
-- Evaluate recording rules and alerts.
-- Forward alerts to Alertmanager.
-- Optional remote_write to AMP.
+- Fazer scrape de metricas de exporters/aplicacoes.
+- Avaliar recording rules e alertas.
+- Encaminhar alertas para o Alertmanager.
+- Fazer remote_write opcional para AMP.
 
-## Config Files
+## Arquivos de configuracao
 
 - `prometheus/prometheus.yml`
 - `prometheus/rules/*.yaml`

@@ -1,39 +1,40 @@
-﻿# Validation Checklist
+﻿# Lista de validacao
 
-## Infrastructure
+## Infraestrutura
 
-- [ ] Terraform apply succeeds for target environment.
-- [ ] AMP workspace exists (if backend_mode=amp).
-- [ ] IRSA role bound to EKS collector service account.
-- [ ] ECS ADOT service running desired task count.
-- [ ] SSM association applied to EC2 instances with target tag.
+- [ ] Terraform apply executa com sucesso no ambiente alvo.
+- [ ] Workspace AMP existe (quando `backend_mode=amp`).
+- [ ] Role de IRSA vinculada ao service account do collector no EKS.
+- [ ] Servico ADOT no ECS com quantidade desejada de tasks em execucao.
+- [ ] Associacao SSM aplicada nas instancias EC2 com tag alvo.
 
-## Data Collection
+## Coleta de dados
 
-- [ ] node_exporter targets are `UP`.
-- [ ] kube-state-metrics targets are `UP`.
-- [ ] blackbox probes produce `probe_success`.
-- [ ] OTLP telemetry reaches collector.
-- [ ] Prometheus remote_write queue has no sustained failures.
+- [ ] Targets de `node_exporter` estao `UP`.
+- [ ] Targets de `kube-state-metrics` estao `UP`.
+- [ ] Probes do blackbox geram `probe_success`.
+- [ ] Telemetria OTLP chega ao collector.
+- [ ] Fila de remote_write do Prometheus sem falhas sustentadas.
 
 ## Dashboards
 
-- [ ] EC2 dashboard shows host CPU/memory/disk/network.
-- [ ] ECS dashboard shows desired/running tasks and resource usage.
-- [ ] EKS dashboard shows node/pod/deployment health.
-- [ ] Blackbox dashboard shows availability and cert expiry.
-- [ ] Self-monitoring dashboard shows core stack health.
+- [ ] Dashboard de EC2 mostra CPU/memoria/disco/rede de host.
+- [ ] Dashboard de ECS mostra tarefas desired/running e uso de recursos.
+- [ ] Dashboard de EKS mostra saude de node/pod/deployment.
+- [ ] Dashboard de blackbox mostra disponibilidade e expiracao de certificado.
+- [ ] Dashboard de self-monitoring mostra saude da stack principal.
 
-## Alerts
+## Alertas
 
-- [ ] Critical/warning/info routing works.
-- [ ] Inhibit rules suppress child noise correctly.
-- [ ] Grouping reduces duplicate notifications.
-- [ ] Silence creation tested via API/UI.
+- [ ] Roteamento de severidades critical/warning/info funcionando.
+- [ ] Inhibit rules suprimindo ruido de alertas filhos corretamente.
+- [ ] Grouping reduzindo notificacoes duplicadas.
+- [ ] Criacao de silence testada por API/UI.
 
-## Security
+## Seguranca
 
-- [ ] No plaintext secrets committed.
-- [ ] TLS certificates valid for all exposed endpoints.
-- [ ] Basic auth/SSO enabled for admin surfaces.
-- [ ] IAM policies are least privilege and scoped.
+- [ ] Nenhum segredo em texto puro commitado.
+- [ ] Certificados TLS validos para todos os endpoints expostos.
+- [ ] Basic auth/SSO habilitados para superficies administrativas.
+- [ ] Politicas IAM com least privilege e escopo correto.
+

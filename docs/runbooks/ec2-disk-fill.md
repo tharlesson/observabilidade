@@ -1,17 +1,18 @@
-﻿# Runbook: EC2 Disk Filling
+﻿# Guia de resposta: Disco do EC2 enchendo
 
-## Alert
+## Alerta
 `EC2DiskWillFillSoon`
 
-## Triage
-1. Check disk usage by mount and top directories.
-2. Validate log rotation and retention settings.
-3. Inspect runaway files and temp folders.
+## Triagem
+1. Verifique uso de disco por mount e diretorios principais.
+2. Valide politicas de rotacao e retencao de logs.
+3. Inspecione arquivos descontrolados e diretorios temporarios.
 
-## Mitigation
-1. Clean unnecessary files.
-2. Increase volume size and filesystem.
-3. Move logs/artifacts to object storage.
+## Mitigacao
+1. Limpe arquivos desnecessarios.
+2. Aumente volume e filesystem.
+3. Mova logs/artefatos para object storage.
 
-## Verify
-- Predictive fill query no longer projects exhaustion within 24h.
+## Validacao
+- Consulta preditiva nao projeta mais esgotamento em 24h.
+

@@ -1,23 +1,23 @@
-﻿# AWS Deployment
+﻿# Deploy na AWS
 
-## Prerequisites
+## Pre-requisitos
 
 - Terraform >= 1.8
-- AWS credentials with permissions for IAM, AMP, ECS, EKS, SSM
+- Credenciais AWS com permissoes para IAM, AMP, ECS, EKS e SSM
 - Helm >= 3.15
-- kubectl configured for target EKS cluster
+- `kubectl` configurado para o cluster EKS de destino
 
-## 1) Prepare Environment Files
+## 1) Preparar arquivos de ambiente
 
-For each environment (`dev`, `stage`, `prod`):
+Para cada ambiente (`dev`, `stage`, `prod`):
 
-1. Enter `terraform/environments/<env>`.
-2. Copy `terraform.tfvars.example` to `terraform.tfvars`.
-3. Copy `backend.hcl.example` to `backend.hcl`.
-4. Fill values for:
-   - EKS OIDC ARN/URL
-   - ECS cluster ARN/subnets/SGs
-   - AMP or custom remote_write endpoint
+1. Entre em `terraform/environments/<env>`.
+2. Copie `terraform.tfvars.example` para `terraform.tfvars`.
+3. Copie `backend.hcl.example` para `backend.hcl`.
+4. Preencha os valores de:
+   - ARN/URL do OIDC do EKS
+   - ARN do cluster ECS, subnets e security groups
+   - endpoint AMP ou endpoint customizado de remote_write
 
 ## 2) Deploy
 
@@ -25,42 +25,43 @@ For each environment (`dev`, `stage`, `prod`):
 make deploy ENV=dev
 ```
 
-Repeat for `stage` and `prod`.
+Repita para `stage` e `prod`.
 
-## 3) What Terraform Applies
+## 3) O que o Terraform aplica
 
-- Optional AMP workspace (`backend_mode = amp`)
-- IRSA role and policy for EKS ADOT collector
-- Helm releases:
+- Workspace AMP opcional (`backend_mode = amp`)
+- Role e policy de IRSA para collector ADOT no EKS
+- Releases Helm:
   - kube-prometheus-stack
   - opentelemetry-collector
-  - opentelemetry-operator (optional)
-- ECS ADOT service with task role
-- EC2 observability setup via SSM document/association
+  - opentelemetry-operator (opcional)
+- Servico ADOT no ECS com task role
+- Setup de observabilidade no EC2 via documento/associacao SSM
 
-## 3.1) ECS ADOT config via SSM Parameter (recommended)
+## 3.1) Config do ADOT no ECS via SSM Parameter (recomendado)
 
-Use `otel/collector-ecs.yaml` as base and store in Parameter Store:
+Use `otel/collector-ecs.yaml` como base e armazene no Parameter Store:
 
 ```bash
 aws ssm put-parameter \
   --name /observability/adot/collector-ecs \
   --type String \
   --overwrite \
-  --value \"$(cat otel/collector-ecs.yaml)\"
+  --value "$(cat otel/collector-ecs.yaml)"
 ```
 
-Then set `ecs_adot_config_ssm_parameter_arn` in `terraform.tfvars`.
+Depois configure `ecs_adot_config_ssm_parameter_arn` no `terraform.tfvars`.
 
-## 4) Post-Deploy Validation
+## 4) Validacao pos-deploy
 
-- Verify Prometheus targets are up.
-- Validate remote_write success (`prometheus_remote_storage_*`).
-- Confirm alert pipeline by firing test alert.
-- Verify dashboards populate by environment and cluster.
+- Verifique se os targets do Prometheus estao no ar.
+- Valide sucesso do remote_write (`prometheus_remote_storage_*`).
+- Confirme o pipeline de alertas disparando um alerta de teste.
+- Verifique dashboards populando por ambiente e cluster.
 
-## 5) Rollback
+## 5) Reversao
 
-- Helm: `helm rollback` per release.
-- Terraform: revert commit + `terraform apply`.
-- Infra teardown: `make destroy ENV=<env>`.
+- Helm: `helm rollback` por release.
+- Terraform: reverter commit + `terraform apply`.
+- Destruir infraestrutura: `make destroy ENV=<env>`.
+

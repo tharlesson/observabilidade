@@ -1,12 +1,12 @@
-﻿# Local Lab
+﻿# Laboratorio local
 
-## Prerequisites
+## Pre-requisitos
 
-- Docker + Docker Compose plugin
+- Docker + plugin Docker Compose
 - OpenSSL
-- Optional: `htpasswd` (otherwise bootstrap script uses httpd container)
+- Opcional: `htpasswd` (caso contrario, o bootstrap usa container httpd)
 
-## Quick Start
+## Inicio rapido
 
 ```bash
 cp .env.example .env
@@ -20,30 +20,30 @@ Endpoints:
 - Prometheus: https://localhost:9090
 - Alertmanager: https://localhost:9093
 
-Default local lab credentials:
+Credenciais padrao do laboratorio:
 
-- Grafana: `admin / change-me` (override via `.env`)
-- Prometheus basic auth: `prom_admin / prom-admin-change-me`
-- Alertmanager basic auth: `alert_admin / alert-admin-change-me`
+- Grafana: `admin / change-me` (sobrescreva via `.env`)
+- Basic auth do Prometheus: `prom_admin / prom-admin-change-me`
+- Basic auth do Alertmanager: `alert_admin / alert-admin-change-me`
 
-## Optional Example Apps
+## Apps de exemplo (opcional)
 
 ```bash
 docker compose -f docker-compose/local-lab/docker-compose.yml --profile examples up -d --build
 ```
 
-- Node sample app: http://localhost:8081
-- Python sample app: http://localhost:8082
-- Java sample app: http://localhost:8083
+- App Node: http://localhost:8081
+- App Python: http://localhost:8082
+- App Java: http://localhost:8083
 
-## Stop
+## Parar
 
 ```bash
 make down-local
 ```
 
-## Notes
+## Observacoes
 
-- TLS certificates are self-signed for lab only.
-- Replace generated basic auth passwords for any shared environment.
-- Local lab uses central OSS stack (not AMP).
+- Os certificados TLS sao self-signed e servem apenas para laboratorio.
+- Troque as senhas geradas de basic auth em qualquer ambiente compartilhado.
+- O laboratorio local usa stack OSS central (sem AMP).

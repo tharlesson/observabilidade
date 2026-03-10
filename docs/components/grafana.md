@@ -1,11 +1,11 @@
-﻿# Component: Grafana OSS
+﻿# Componente: Grafana OSS
 
-## Purpose
+## Finalidade
 
-- Central dashboarding.
-- Unified alerting rules and notification policies.
+- Dashboarding centralizado.
+- Regras de alerting e politicas de notificacao unificadas.
 
-## Config Files
+## Arquivos de configuracao
 
 - `grafana/provisioning/datasources/datasources.yaml`
 - `grafana/provisioning/dashboards/dashboards.yaml`

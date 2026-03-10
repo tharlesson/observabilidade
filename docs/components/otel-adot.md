@@ -1,12 +1,12 @@
-﻿# Component: OpenTelemetry / ADOT
+﻿# Componente: OpenTelemetry / ADOT
 
-## Purpose
+## Finalidade
 
-- Collect OTLP, host and platform metrics.
-- Enrich telemetry with resource labels.
-- Export to Prometheus-compatible backend.
+- Coletar OTLP, metricas de host e metricas de plataforma.
+- Enriquecer telemetria com labels de recurso.
+- Exportar para backend compativel com Prometheus.
 
-## Config Files
+## Arquivos de configuracao
 
 - `otel/collector-ec2.yaml`
 - `otel/collector-ecs.yaml`

@@ -1,17 +1,18 @@
-﻿# Runbook: EKS Pod CrashLoopBackOff
+﻿# Guia de resposta: Pod em CrashLoopBackOff no EKS
 
-## Alert
+## Alerta
 `EKSPodCrashLoopBackOff`
 
-## Triage
-1. Check pod logs and previous logs.
-2. Inspect container command/config/env and recent deploy.
-3. Validate dependencies (DB/cache/API).
+## Triagem
+1. Verifique logs do pod e logs anteriores.
+2. Inspecione command/config/env do container e deploy recente.
+3. Valide dependencias (DB/cache/API).
 
-## Mitigation
-1. Roll back deployment.
-2. Fix config/secret/env.
-3. Increase resources if OOM-related.
+## Mitigacao
+1. Faça rollback do deployment.
+2. Corrija config/secret/env.
+3. Aumente recursos se estiver relacionado a OOM.
 
-## Verify
-- CrashLoop count drops and pod stays Running.
+## Validacao
+- Contagem de CrashLoop reduz e pod permanece Running.
+

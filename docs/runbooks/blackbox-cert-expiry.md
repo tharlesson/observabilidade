@@ -1,17 +1,18 @@
-﻿# Runbook: Certificate Expiring Soon
+﻿# Guia de resposta: Certificado proximo de expirar
 
-## Alert
+## Alerta
 `BlackboxCertificateExpiringSoon`
 
-## Triage
-1. Identify certificate owner and renewal process.
-2. Confirm SAN/CN match and chain validity.
-3. Validate automation (ACM/cert-manager/PKI pipeline).
+## Triagem
+1. Identifique o owner do certificado e o processo de renovacao.
+2. Confirme SAN/CN e validade da cadeia.
+3. Valide automacao (ACM/cert-manager/pipeline de PKI).
 
-## Mitigation
-1. Renew certificate.
-2. Deploy updated certificate and key.
-3. Validate HTTPS handshake and chain.
+## Mitigacao
+1. Renove o certificado.
+2. Publique certificado e chave atualizados.
+3. Valide handshake HTTPS e cadeia.
 
-## Verify
-- Cert expiry > 14 days and probe remains successful.
+## Validacao
+- Expiracao acima de 14 dias e probe continua com sucesso.
+

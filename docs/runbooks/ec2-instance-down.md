@@ -1,21 +1,22 @@
-﻿# Runbook: EC2 Instance Down
+﻿# Guia de resposta: Instancia EC2 indisponivel
 
-## Alert
+## Alerta
 `EC2InstanceDown`
 
-## Impact
-Host metrics unavailable; possible node or network outage.
+## Impacto
+Metricas do host indisponiveis; possivel falha de no ou rede.
 
-## Triage
-1. Confirm instance state in AWS Console/CLI.
-2. Check security group and route changes.
-3. Validate `node_exporter` process/service.
-4. Verify Prometheus can reach target on `:9100`.
+## Triagem
+1. Confirme estado da instancia no Console/CLI da AWS.
+2. Verifique alteracoes de security group e rotas.
+3. Valide processo/servico do `node_exporter`.
+4. Confirme se o Prometheus alcanca o target em `:9100`.
 
-## Mitigation
-1. Restart instance or recover via Auto Scaling.
-2. Restart `node_exporter` service.
-3. Fix network/security rules.
+## Mitigacao
+1. Reinicie a instancia ou recupere via Auto Scaling.
+2. Reinicie o servico `node_exporter`.
+3. Corrija regras de rede/seguranca.
 
-## Verify Recovery
+## Validacao da recuperacao
 - `up{job="node-exporter",instance="<instance>"} == 1`
+

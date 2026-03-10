@@ -1,13 +1,13 @@
-﻿# Sample App Python
+﻿# App de exemplo em Python
 
-- Flask app with:
+- Aplicacao Flask com os endpoints:
   - `/`
   - `/healthz`
   - `/error`
   - `/metrics`
-- Sends traces via OTLP gRPC.
+- Envia traces via OTLP gRPC.
 
-## Run
+## Executar
 
 ```bash
 pip install -r requirements.txt

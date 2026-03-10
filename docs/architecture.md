@@ -1,62 +1,62 @@
-﻿# Architecture
+﻿# Arquitetura
 
-## Goals
+## Objetivos
 
-- One reusable observability platform for EC2, ECS and EKS.
-- Everything as code (Terraform, Helm, YAML provisioning).
-- Environment isolation for `dev`, `stage`, `prod`.
-- Centralized dashboards and alerts with standardized labels.
+- Uma plataforma de observabilidade reutilizavel para EC2, ECS e EKS.
+- Tudo como codigo (Terraform, Helm e provisioning em YAML).
+- Isolamento por ambiente em `dev`, `stage` e `prod`.
+- Dashboards e alertas centralizados com labels padronizadas.
 
-## Logical Architecture
+## Arquitetura logica
 
-1. Edge collectors:
-   - `node_exporter` on EC2/VMs.
-   - ADOT Collector on ECS (service/sidecar, with `ecs_observer`).
-   - ADOT/OpenTelemetry Collector on EKS (daemonset).
-2. Scrape and aggregate:
-   - Prometheus Agent or Prometheus server in edge clusters.
-   - Optional central Prometheus-compatible backend (AMP).
-3. Control plane:
-   - Grafana OSS central with file provisioning.
-   - Alertmanager OSS central with routing/inhibit/grouping/templates.
+1. Coletores de borda:
+   - `node_exporter` em EC2/VMs.
+   - ADOT Collector no ECS (servico/sidecar com `ecs_observer`).
+   - ADOT/OpenTelemetry Collector no EKS (daemonset).
+2. Coleta e agregacao:
+   - Prometheus Agent ou Prometheus Server nas bordas.
+   - Backend central opcional compativel com Prometheus (AMP).
+3. Plano de controle:
+   - Grafana OSS central com provisioning por arquivo.
+   - Alertmanager OSS central com routing/inhibit/grouping/templates.
 4. Health checks:
-   - `blackbox_exporter` for HTTP/HTTPS/TCP/certificate expiry.
+   - `blackbox_exporter` para HTTP/HTTPS/TCP e expiracao de certificado.
 
-## Why This Layout
+## Por que este desenho
 
-- Keeps data collection close to workloads for resilience and reduced egress.
-- Supports hybrid operation:
-  - Local/lab with OSS components in Docker Compose.
-  - AWS production with AMP remote_write and IAM-scoped credentials.
-- Separates responsibilities:
-  - Terraform: infrastructure, IAM, IRSA, ECS task roles.
-  - Helm: Kubernetes runtime configs.
-  - Prometheus/Grafana/Alertmanager YAML/JSON: operational behavior.
+- Mantem a coleta perto dos workloads para maior resiliencia e menor egress.
+- Suporta operacao hibrida:
+  - local/lab com stack OSS em Docker Compose;
+  - producao AWS com AMP remote_write e credenciais IAM escopadas.
+- Separa responsabilidades:
+  - Terraform: infraestrutura, IAM, IRSA e Task Roles do ECS.
+  - Helm: configuracoes de runtime no Kubernetes.
+  - YAML/JSON de Prometheus/Grafana/Alertmanager: comportamento operacional.
 
-## Security Model
+## Modelo de seguranca
 
-- IAM least privilege:
-  - IRSA role for EKS collector.
-  - Task role for ECS collector.
-  - EC2 instance profile for SSM + metrics shipping.
-- No hardcoded secrets:
-  - `.env.example`, SSM parameter placeholders and webhook placeholders.
-- TLS and auth in local lab examples for Prometheus/Grafana/Alertmanager.
-- Network policies in observability namespace (baseline deny ingress + allow namespace).
+- IAM com least privilege:
+  - IRSA para collector no EKS.
+  - Task Role para collector no ECS.
+  - Instance profile para EC2 com SSM + envio de metricas.
+- Sem segredo hardcoded:
+  - `.env.example`, placeholders de SSM e webhooks.
+- TLS e auth nos exemplos de laboratorio para Prometheus/Grafana/Alertmanager.
+- Network policies no namespace de observabilidade (deny ingress baseline + allow namespace).
 
-## Label Standard
+## Padrao de labels
 
-All metrics/alerts must carry:
+Todas as metricas e alertas devem conter:
 
 - `environment`
 - `cluster`
 - `service`
 - `namespace`
 - `team`
-- `severity` (alerts)
+- `severity` (alertas)
 
-This repository enforces labels by:
-- Collector resource processors.
-- Prometheus external labels and relabeling.
-- Alert rule labels.
-- Dashboard variable filters.
+Este repositorio reforca as labels por:
+- processors de recurso do collector;
+- external labels e relabeling no Prometheus;
+- labels de regras de alerta;
+- variaveis de filtro dos dashboards.

@@ -1,17 +1,18 @@
-﻿# Runbook: Blackbox Endpoint Down
+﻿# Guia de resposta: Endpoint Blackbox indisponivel
 
-## Alert
+## Alerta
 `BlackboxEndpointDown`
 
-## Triage
-1. Confirm endpoint outage from external and internal vantage points.
-2. Check DNS, TLS cert, ingress/load balancer health.
-3. Review recent network/firewall changes.
+## Triagem
+1. Confirme indisponibilidade por visao externa e interna.
+2. Verifique DNS, certificado TLS e saude de ingress/load balancer.
+3. Revise mudancas recentes de rede/firewall.
 
-## Mitigation
-1. Failover to healthy endpoint/region.
-2. Restore ingress or backend service.
-3. Update routing/allowlist.
+## Mitigacao
+1. Faca failover para endpoint/regiao saudavel.
+2. Restaure ingress ou servico de backend.
+3. Atualize roteamento/allowlist.
 
-## Verify
-- `probe_success` returns to `1`.
+## Validacao
+- `probe_success` volta para `1`.
+

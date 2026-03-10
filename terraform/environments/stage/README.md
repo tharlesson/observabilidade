@@ -1,8 +1,8 @@
-﻿# stage environment
+﻿# Ambiente stage
 
-1. Copy `terraform.tfvars.example` to `terraform.tfvars`.
-2. Copy `backend.hcl.example` to `backend.hcl` and fill values.
-3. Run:
+1. Copie `terraform.tfvars.example` para `terraform.tfvars`.
+2. Copie `backend.hcl.example` para `backend.hcl` e preencha os valores.
+3. Execute:
 
 ```bash
 terraform init -backend-config=backend.hcl

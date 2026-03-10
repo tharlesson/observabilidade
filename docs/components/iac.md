@@ -1,12 +1,12 @@
-﻿# Component: Terraform + Helm
+﻿# Componente: Terraform + Helm
 
-## Purpose
+## Finalidade
 
-- Provision cloud resources and IAM.
-- Deploy Kubernetes observability stack via Helm.
-- Keep `dev`, `stage`, `prod` isolated and reproducible.
+- Provisionar recursos de nuvem e IAM.
+- Publicar a stack de observabilidade no Kubernetes via Helm.
+- Manter `dev`, `stage` e `prod` isolados e reproduziveis.
 
-## Config Files
+## Arquivos de configuracao
 
 - `terraform/modules/*`
 - `terraform/environments/*`

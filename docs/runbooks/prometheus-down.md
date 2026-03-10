@@ -1,17 +1,18 @@
-﻿# Runbook: Prometheus Down
+﻿# Guia de resposta: Prometheus indisponivel
 
-## Alert
+## Alerta
 `PrometheusTargetDown`
 
-## Triage
-1. Check container/pod status and logs.
-2. Validate disk availability and TSDB health.
-3. Verify config/rules syntax changes.
+## Triagem
+1. Verifique status e logs de container/pod.
+2. Valide disponibilidade de disco e saude da TSDB.
+3. Verifique alteracoes recentes de sintaxe em config/rules.
 
-## Mitigation
-1. Restart service.
-2. Roll back last config/rules change.
-3. Recover volume or increase storage.
+## Mitigacao
+1. Reinicie o servico.
+2. Faça rollback da ultima alteracao de config/rules.
+3. Recupere volume ou aumente armazenamento.
 
-## Verify
-- `up{job="prometheus"} == 1` and targets/rules resume.
+## Validacao
+- `up{job="prometheus"} == 1` e targets/rules retomam.
+

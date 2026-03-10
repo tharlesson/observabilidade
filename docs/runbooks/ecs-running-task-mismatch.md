@@ -1,17 +1,18 @@
-﻿# Runbook: ECS Running Task Mismatch
+﻿# Guia de resposta: Divergencia de tarefas no ECS
 
-## Alert
+## Alerta
 `ECSServiceRunningTaskMismatch`
 
-## Triage
-1. Compare desired vs running tasks per service.
-2. Inspect recent ECS events for placement or health failures.
-3. Validate task definition image/env/secret references.
+## Triagem
+1. Compare desired vs running por servico.
+2. Inspecione eventos recentes do ECS para falhas de health/placement.
+3. Valide imagem/env/secrets da task definition.
 
-## Mitigation
-1. Roll back last task definition if regression.
-2. Increase capacity/providers.
-3. Fix failing health checks.
+## Mitigacao
+1. Faça rollback da ultima task definition em caso de regressao.
+2. Aumente capacidade/providers.
+3. Corrija health checks com falha.
 
-## Verify
-- Running count matches desired count for 10m.
+## Validacao
+- Quantidade running igual a desired por 10 minutos.
+

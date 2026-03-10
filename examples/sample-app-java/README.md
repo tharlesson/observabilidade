@@ -1,13 +1,13 @@
-﻿# Sample App Java
+﻿# App de exemplo em Java
 
-- Spring Boot app exposing:
+- Aplicacao Spring Boot com os endpoints:
   - `/`
   - `/healthz`
   - `/error`
   - `/actuator/prometheus`
-- OpenTelemetry auto-instrumentation via Java Agent.
+- Auto-instrumentacao OpenTelemetry via Java Agent.
 
-## Run
+## Executar
 
 ```bash
 mvn spring-boot:run

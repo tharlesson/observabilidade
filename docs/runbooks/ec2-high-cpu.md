@@ -1,17 +1,18 @@
-﻿# Runbook: EC2 High CPU
+﻿# Guia de resposta: CPU alta no EC2
 
-## Alert
+## Alerta
 `EC2HighCPUUsage`
 
-## Triage
-1. Identify top CPU processes (`top`, `pidstat`).
-2. Correlate with deploys or cron jobs.
-3. Check saturation across fleet.
+## Triagem
+1. Identifique processos com maior consumo (`top`, `pidstat`).
+2. Correlacione com deploys ou jobs agendados.
+3. Avalie saturacao em toda a frota.
 
-## Mitigation
-1. Scale out if load-driven.
-2. Tune app worker/thread config.
-3. Add CPU limits/requests for noisy workloads.
+## Mitigacao
+1. Escale horizontalmente quando a carga justificar.
+2. Ajuste configuracao de workers/threads da aplicacao.
+3. Defina limites/requests de CPU para workloads ruidosos.
 
-## Verify
-- CPU usage returns below threshold for at least 10m.
+## Validacao
+- Uso de CPU abaixo do limite por pelo menos 10 minutos.
+

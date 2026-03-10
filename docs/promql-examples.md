@@ -1,4 +1,4 @@
-﻿# PromQL Examples
+﻿# Exemplos de PromQL
 
 ## EC2 / VM
 
@@ -38,7 +38,7 @@ kube_deployment_spec_replicas - kube_deployment_status_replicas_available
 sum by(namespace) (kube_pod_status_phase{phase="Pending"})
 ```
 
-## Application SLOs
+## SLOs de aplicacao
 
 ```promql
 sum(rate(http_server_requests_total{status_code=~"5.."}[5m])) / clamp_min(sum(rate(http_server_requests_total[5m])), 1)

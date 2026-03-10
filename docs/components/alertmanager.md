@@ -1,12 +1,12 @@
-﻿# Component: Alertmanager OSS
+﻿# Componente: Alertmanager OSS
 
-## Purpose
+## Finalidade
 
-- Route alerts by severity.
-- Group and inhibit noisy alerts.
-- Integrate with Slack, Email, Teams (webhook model).
+- Rotear alertas por severidade.
+- Agrupar e inibir alertas ruidosos.
+- Integrar com Slack, Email e Teams (modelo webhook).
 
-## Config Files
+## Arquivos de configuracao
 
 - `alertmanager/alertmanager.yml`
 - `alertmanager/templates/default.tmpl`

@@ -1,28 +1,29 @@
-﻿# GitOps Workflow
+﻿# Fluxo GitOps
 
 ## Branching
 
-- Keep environment overlays under `terraform/environments/*`.
-- Promote by pull request from `dev` to `stage` to `prod`.
+- Mantenha overlays de ambiente em `terraform/environments/*`.
+- Promova por pull request de `dev` para `stage` e depois para `prod`.
 
-## Validation Gates
+## Gates de validacao
 
 1. `make lint`
 2. `make validate`
-3. Terraform plan review for each environment
-4. Helm values diff for EKS releases
-5. Dashboard/alert provisioning diff review
+3. Revisao de Terraform plan por ambiente
+4. Revisao de diff de values Helm no EKS
+5. Revisao de diff de provisioning de dashboards/alertas
 
-## Suggested Pipeline Stages
+## Etapas sugeridas de pipeline
 
-1. Static checks
-2. Terraform plan (non-prod)
-3. Terraform apply (non-prod)
-4. Smoke tests and synthetic checks
-5. Manual approval
+1. Checks estaticos
+2. Terraform plan (nao-prod)
+3. Terraform apply (nao-prod)
+4. Smoke tests e verificacoes sinteticas
+5. Aprovacao manual
 6. Terraform apply (prod)
 
-## Rollback Strategy
+## Estrategia de reversao
 
-- Revert Git commit and re-apply.
-- For urgent dashboard/alert rollback, restore last known good JSON/YAML commit.
+- Reverter commit no Git e reaplicar.
+- Para reversao urgente de dashboard/alerta, restaurar o ultimo commit valido de JSON/YAML.
+

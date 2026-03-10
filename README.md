@@ -1,13 +1,13 @@
-﻿# AWS Observability Platform (Production-Ready IaC)
+﻿# Plataforma de Observabilidade AWS (IaC Pronta para Producao)
 
-Plataforma de observabilidade como código para AWS, com suporte a:
+Plataforma de observabilidade como codigo para AWS, com suporte a:
 
 - VMs/EC2
-- ECS workloads
-- EKS clusters
-- Aplicações instrumentadas via OpenTelemetry e `/metrics`
+- workloads no ECS
+- clusters EKS
+- aplicacoes instrumentadas com OpenTelemetry e `/metrics`
 
-Componentes obrigatórios incluídos neste repositório:
+Componentes obrigatorios incluidos neste repositorio:
 
 - Prometheus
 - Grafana OSS
@@ -20,23 +20,23 @@ Componentes obrigatórios incluídos neste repositório:
 - Prometheus Operator / kube-prometheus-stack
 - Terraform
 - Helm
-- Docker Compose para lab/local
+- Docker Compose para laboratorio local
 
-## 1) Características principais
+## 1) Caracteristicas principais
 
-- Observabilidade multi-ambiente (`dev`, `stage`, `prod`)
+- Observabilidade multiambiente (`dev`, `stage`, `prod`)
 - Provisionamento versionado com Terraform + Helm
-- Grafana com provisioning declarativo (datasources, dashboards, alerting)
+- Grafana com provisioning declarativo (datasources, dashboards e alerting)
 - Alertmanager com rotas por severidade (`critical`, `warning`, `info`)
 - Inhibit rules, grouping e modelo de silences
-- Recording rules para queries pesadas
-- Runbooks para alertas críticos
-- Suporte a backend central Prometheus-compatible (AMP opcional)
-- Lab local com Docker Compose (TLS + auth + persistência)
+- Recording rules para consultas pesadas
+- Guias de resposta para os alertas principais
+- Suporte a backend central compativel com Prometheus (AMP opcional)
+- Laboratorio local com Docker Compose (TLS + auth + persistencia)
 
-## 2) Versões pinadas
+## 2) Versoes pinadas
 
-| Componente | Versão pinada |
+| Componente | Versao pinada |
 |---|---|
 | Terraform | >= 1.8.0 |
 | AWS Provider | ~> 5.45 |
@@ -52,7 +52,7 @@ Componentes obrigatórios incluídos neste repositório:
 | OTel Operator chart | 0.83.0 |
 | kube-prometheus-stack chart | 68.2.1 |
 
-## 3) Estrutura do repositório
+## 3) Estrutura do repositorio
 
 ```text
 terraform/
@@ -113,21 +113,21 @@ Makefile
 README.md
 ```
 
-## 4) Arquitetura e decisões
+## 4) Arquitetura e decisoes
 
 Detalhes completos: [`docs/architecture.md`](docs/architecture.md)
 
-Decisões principais:
+Decisoes principais:
 
 1. Coleta na borda com ADOT/OTel + exporters para reduzir acoplamento.
-2. Backend Prometheus-compatible central via `remote_write`.
-3. Dashboard e alerting centralizados no Grafana/Alertmanager OSS.
+2. Backend central compativel com Prometheus via `remote_write`.
+3. Dashboards e alertas centralizados em Grafana OSS e Alertmanager OSS.
 4. Infra e runtime declarativos (Terraform + Helm + YAML/JSON provisioning).
-5. Labels padrão aplicadas em métricas/alertas para governança e roteamento.
+5. Labels padrao aplicadas em metricas/alertas para governanca e roteamento.
 
-## 5) Labels padrão
+## 5) Labels padrao
 
-Todas as métricas e alertas devem usar:
+Todas as metricas e alertas devem usar:
 
 - `environment`
 - `cluster`
@@ -136,31 +136,31 @@ Todas as métricas e alertas devem usar:
 - `team`
 - `severity` (alertas)
 
-Essas labels são reforçadas em:
+Essas labels sao reforcadas em:
 
-- Configs de collector (`resource` processor)
+- Configuracoes de collector (`resource` processor)
 - External labels e relabeling no Prometheus
 - Rule labels no Prometheus/Grafana
 
-## 6) Monitoramento por domínio
+## 6) Monitoramento por dominio
 
 ### EC2 / VMs
 
 Inclui:
 
-- `node_exporter` deployment bootstrap via SSM
-- Dashboards: CPU, memória, disco, inode, load, rede
-- Alertas: indisponibilidade, CPU alta, memória alta, disco enchendo, inode baixo
+- bootstrap de `node_exporter` via SSM
+- dashboards de CPU, memoria, disco, inode, load e rede
+- alertas de indisponibilidade, CPU alta, memoria alta, disco enchendo e inode baixo
 
 ### ECS
 
 Inclui:
 
-- ADOT Collector como serviço ECS
+- ADOT Collector como servico ECS
 - Task Role com least privilege
-- `ecs_observer` para descoberta automática de tasks
-- Coleta OTLP + Prometheus `/metrics`
-- Alertas de degradação de serviço e mismatch de tasks
+- `ecs_observer` para descoberta automatica de tasks
+- coleta OTLP + Prometheus `/metrics`
+- alertas de degradacao de servico e mismatch de tasks
 
 ### EKS
 
@@ -172,9 +172,9 @@ Inclui:
 - OpenTelemetry Operator opcional
 - IRSA para collector
 - ServiceMonitor/PodMonitor de exemplo
-- Alertas de Node/Pod/Replica health
+- alertas de saude de Node/Pod/Replica
 
-### Aplicações
+### Aplicacoes
 
 Exemplos reais prontos:
 
@@ -182,14 +182,15 @@ Exemplos reais prontos:
 - Java (Spring Boot): `/actuator/prometheus` + OTEL Java Agent
 - Python (Flask): `/metrics` + OTLP
 
-No lab local, os exemplos sobem com profile `examples` em:
+No laboratorio local, os exemplos sobem com profile `examples` em:
+
 - `http://localhost:8081` (Node)
 - `http://localhost:8082` (Python)
 - `http://localhost:8083` (Java)
 
 ## 7) Dashboards e alerting
 
-### Grafana provisioning
+### Provisioning do Grafana
 
 - Datasources: `grafana/provisioning/datasources/datasources.yaml`
 - Dashboards provider: `grafana/provisioning/dashboards/dashboards.yaml`
@@ -207,18 +208,18 @@ No lab local, os exemplos sobem com profile `examples` em:
 - `blackbox-overview.json`
 - `self-monitoring.json`
 
-### Alertmanager routing
+### Roteamento no Alertmanager
 
 - `critical` -> Slack + Email + Teams webhook
 - `warning` -> Slack + Email
-- `info` -> Teams/Slack info
+- `info` -> Teams/Slack de informacao
 - grouping, inhibit rules e mute intervals configurados
 
-## 8) Local lab (Docker Compose)
+## 8) Laboratorio local (Docker Compose)
 
 Guia completo: [`docs/local-lab.md`](docs/local-lab.md)
 
-Passos rápidos:
+Passos rapidos:
 
 ```bash
 cp .env.example .env
@@ -232,29 +233,29 @@ Endpoints:
 - Prometheus: `https://localhost:9090`
 - Alertmanager: `https://localhost:9093`
 
-Credenciais default de laboratório:
+Credenciais padrao do laboratorio:
 
 - Grafana: `admin / change-me`
 - Prometheus: `prom_admin / prom-admin-change-me`
 - Alertmanager: `alert_admin / alert-admin-change-me`
 
-Parar lab:
+Para parar o laboratorio:
 
 ```bash
 make down-local
 ```
 
-## 9) Deploy em AWS
+## 9) Deploy na AWS
 
 Guia completo: [`docs/deployment-aws.md`](docs/deployment-aws.md)
 
 Fluxo por ambiente:
 
 1. Configurar `terraform.tfvars` e `backend.hcl`
-2. `make deploy ENV=dev`
-3. Promover para `stage`/`prod`
+2. Executar `make deploy ENV=dev`
+3. Promover para `stage` e `prod`
 
-## 10) Segurança
+## 10) Seguranca
 
 Guia completo: [`docs/security.md`](docs/security.md)
 
@@ -262,11 +263,11 @@ Inclui baseline de:
 
 - IAM least privilege
 - IRSA (EKS) e Task Role (ECS)
-- TLS + auth em superfícies sensíveis
+- TLS + auth em superficies sensiveis
 - placeholders para secrets
-- NetworkPolicy no namespace observability
+- NetworkPolicy no namespace de observabilidade
 
-## 11) Comandos úteis
+## 11) Comandos uteis
 
 ```bash
 make bootstrap-local
@@ -281,15 +282,15 @@ make deploy ENV=dev
 make destroy ENV=dev
 ```
 
-## 12) PromQL úteis
+## 12) PromQL util
 
 Veja: [`docs/promql-examples.md`](docs/promql-examples.md)
 
-## 13) Runbooks
+## 13) Guias de resposta
 
 Pasta: `docs/runbooks/`
 
-Inclui runbooks para:
+Inclui guias para:
 
 - EC2InstanceDown
 - EC2HighCPUUsage
@@ -302,14 +303,16 @@ Inclui runbooks para:
 - BlackboxCertificateExpiringSoon
 - PrometheusTargetDown
 
-## 14) Checklist final de validação
+## 14) Lista final de validacao
 
 Arquivo: [`docs/checklist-validation.md`](docs/checklist-validation.md)
 
-## 15) Observações para produção
+## 15) Observacoes para producao
 
-- Trocar certificados self-signed por certificados válidos (ACM/PKI).
+- Trocar certificados self-signed por certificados validos (ACM/PKI).
 - Mover secrets para SSM/Secrets Manager.
 - Habilitar SSO/OIDC no Grafana.
-- Integrar pipeline GitOps com aprovação para `prod`.
-- Ajustar retenção e recursos por volume real de métricas.
+- Integrar pipeline GitOps com aprovacao para `prod`.
+- Ajustar retencao e recursos conforme volume real de metricas.
+
+

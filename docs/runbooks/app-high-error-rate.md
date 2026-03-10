@@ -1,17 +1,18 @@
-﻿# Runbook: Application High Error Rate
+﻿# Guia de resposta: Taxa alta de erro na aplicacao
 
-## Alert
+## Alerta
 `AppHighErrorRate` / `ECSServiceHighErrorRate`
 
-## Triage
-1. Break down errors by route/status/version.
-2. Correlate with deployment timeline.
-3. Check downstream dependencies.
+## Triagem
+1. Quebre os erros por rota/status/versao.
+2. Correlacione com a linha do tempo de deploys.
+3. Verifique dependencias downstream.
 
-## Mitigation
-1. Roll back bad deploy.
-2. Enable degradation/fallback path.
-3. Increase retries/circuit breaker where safe.
+## Mitigacao
+1. Faca rollback do deploy com problema.
+2. Habilite caminho de degradacao/fallback.
+3. Aumente retries/circuit breaker onde for seguro.
 
-## Verify
-- 5xx ratio below threshold for 10m.
+## Validacao
+- Razao de 5xx abaixo do limite por pelo menos 10 minutos.
+
