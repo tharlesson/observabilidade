@@ -1,0 +1,78 @@
+﻿groups:
+  - name: ec2-host-alerts
+    interval: 30s
+    rules:
+      - alert: EC2InstanceDown
+        expr: up{job="node-exporter"} == 0
+        for: 5m
+        labels:
+          severity: critical
+          team: platform
+          service: ec2
+          namespace: infrastructure
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "EC2/VM instance is down"
+          description: "No scrape from node_exporter on {{ $labels.instance }} for 5m."
+          runbook_url: "https://example.local/runbooks/ec2-instance-down"
+
+      - alert: EC2HighCPUUsage
+        expr: 100 - (avg by(instance, environment, cluster, team) (rate(node_cpu_seconds_total{job="node-exporter",mode="idle"}[5m])) * 100) > 85
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          service: ec2
+          namespace: infrastructure
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "High CPU usage on EC2/VM"
+          description: "CPU usage is above 85% on {{ $labels.instance }} for 10m."
+          runbook_url: "https://example.local/runbooks/ec2-high-cpu"
+
+      - alert: EC2HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes{job="node-exporter"} / node_memory_MemTotal_bytes{job="node-exporter"})) * 100 > 90
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          service: ec2
+          namespace: infrastructure
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "High memory usage on EC2/VM"
+          description: "Memory usage is above 90% on {{ $labels.instance }} for 10m."
+          runbook_url: "https://example.local/runbooks/ec2-high-memory"
+
+      - alert: EC2DiskWillFillSoon
+        expr: predict_linear(node_filesystem_avail_bytes{job="node-exporter",fstype!="tmpfs",mountpoint!~"/run.*"}[6h], 24 * 3600) < 0
+        for: 15m
+        labels:
+          severity: critical
+          team: platform
+          service: ec2
+          namespace: infrastructure
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "Disk will fill within 24h"
+          description: "Filesystem on {{ $labels.instance }} ({{ $labels.mountpoint }}) is predicted to fill in less than 24h."
+          runbook_url: "https://example.local/runbooks/ec2-disk-fill"
+
+      - alert: EC2LowInodes
+        expr: (node_filesystem_files_free{job="node-exporter",fstype!="tmpfs"} / node_filesystem_files{job="node-exporter",fstype!="tmpfs"}) * 100 < 10
+        for: 15m
+        labels:
+          severity: warning
+          team: platform
+          service: ec2
+          namespace: infrastructure
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "Low inode availability"
+          description: "Inode availability below 10% on {{ $labels.instance }} ({{ $labels.mountpoint }})."
+          runbook_url: "https://example.local/runbooks/ec2-low-inodes"

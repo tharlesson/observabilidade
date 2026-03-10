@@ -1,0 +1,53 @@
+﻿receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 512
+    spike_limit_mib: 128
+  resource:
+    attributes:
+      - key: environment
+        action: upsert
+        value: ${ENVIRONMENT}
+      - key: cluster
+        action: upsert
+        value: ${CLUSTER}
+      - key: team
+        action: upsert
+        value: ${TEAM}
+  batch:
+    send_batch_size: 1024
+    timeout: 10s
+
+exporters:
+  prometheus:
+    endpoint: 0.0.0.0:9464
+    namespace: app
+  logging:
+    loglevel: info
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+service:
+  extensions: [health_check]
+  telemetry:
+    metrics:
+      address: 0.0.0.0:8888
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [prometheus, logging]
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [logging]

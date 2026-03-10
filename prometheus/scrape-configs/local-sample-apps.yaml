@@ -1,0 +1,27 @@
+﻿- job_name: sample-apps
+  scrape_interval: 15s
+  static_configs:
+    - targets: ["sample-app-node:8080", "sample-app-python:8080"]
+      labels:
+        environment: dev
+        cluster: local-lab
+        namespace: application
+        team: platform
+  metrics_path: /metrics
+  relabel_configs:
+    - source_labels: [__address__]
+      regex: "(sample-app-[^:]+):.*"
+      replacement: "$1"
+      target_label: service
+
+- job_name: sample-app-java
+  scrape_interval: 15s
+  static_configs:
+    - targets: ["sample-app-java:8080"]
+      labels:
+        environment: dev
+        cluster: local-lab
+        namespace: application
+        team: platform
+        service: sample-app-java
+  metrics_path: /actuator/prometheus

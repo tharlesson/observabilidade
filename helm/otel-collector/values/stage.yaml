@@ -1,0 +1,12 @@
+﻿extraEnvs:
+  - name: ENVIRONMENT
+    value: stage
+  - name: CLUSTER
+    value: eks-stage
+resources:
+  requests:
+    cpu: 300m
+    memory: 700Mi
+  limits:
+    cpu: 1500m
+    memory: 1536Mi

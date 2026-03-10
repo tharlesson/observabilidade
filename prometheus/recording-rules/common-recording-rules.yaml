@@ -1,0 +1,27 @@
+﻿groups:
+  - name: common-recording-rules
+    interval: 30s
+    rules:
+      - record: cluster:node_cpu_utilization:avg5m
+        expr: avg by(cluster, environment, team) (100 - (rate(node_cpu_seconds_total{mode="idle"}[5m]) * 100))
+
+      - record: cluster:node_memory_utilization:avg5m
+        expr: avg by(cluster, environment, team) ((1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100)
+
+      - record: cluster:node_filesystem_usage:avg5m
+        expr: avg by(cluster, environment, team, mountpoint) ((1 - node_filesystem_avail_bytes{fstype!="tmpfs"} / node_filesystem_size_bytes{fstype!="tmpfs"}) * 100)
+
+      - record: namespace:pod_restarts:sum5m
+        expr: sum by(cluster, environment, namespace, team) (increase(kube_pod_container_status_restarts_total[5m]))
+
+      - record: service:http_requests_per_second:rate5m
+        expr: sum by(cluster, environment, namespace, service, team) (rate(http_server_requests_total[5m]))
+
+      - record: service:http_error_rate:ratio5m
+        expr: sum by(cluster, environment, namespace, service, team) (rate(http_server_requests_total{status_code=~"5.."}[5m])) / clamp_min(sum by(cluster, environment, namespace, service, team) (rate(http_server_requests_total[5m])), 1)
+
+      - record: service:http_latency_p95_seconds:5m
+        expr: histogram_quantile(0.95, sum by (le, cluster, environment, namespace, service, team) (rate(http_server_duration_seconds_bucket[5m])))
+
+      - record: service:blackbox_availability:ratio30m
+        expr: avg_over_time(probe_success{job=~"blackbox-http|blackbox-tcp"}[30m])

@@ -1,0 +1,35 @@
+﻿# Terraform
+**/.terraform/
+**/.terraform.lock.hcl
+**/terraform.tfstate
+**/terraform.tfstate.*
+crash.log
+
+# Env and secrets
+.env
+*.secret
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+
+# Logs
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Node
+node_modules/
+
+# Java
+**/target/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

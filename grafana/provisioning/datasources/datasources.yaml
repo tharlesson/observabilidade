@@ -1,0 +1,36 @@
+﻿apiVersion: 1
+
+datasources:
+  - name: prometheus-central
+    uid: prometheus-central
+    type: prometheus
+    access: proxy
+    isDefault: true
+    url: ${GRAFANA_PROMETHEUS_URL}
+    basicAuth: true
+    basicAuthUser: ${PROMETHEUS_BASIC_AUTH_USER}
+    secureJsonData:
+      basicAuthPassword: ${PROMETHEUS_BASIC_AUTH_PASSWORD}
+    jsonData:
+      httpMethod: POST
+      timeInterval: 30s
+      manageAlerts: true
+      prometheusType: Prometheus
+      prometheusVersion: 2.54.0
+      tlsSkipVerify: true
+    editable: true
+
+  - name: alertmanager-central
+    uid: alertmanager-central
+    type: alertmanager
+    access: proxy
+    url: ${GRAFANA_ALERTMANAGER_URL}
+    basicAuth: true
+    basicAuthUser: ${ALERTMANAGER_BASIC_AUTH_USER}
+    secureJsonData:
+      basicAuthPassword: ${ALERTMANAGER_BASIC_AUTH_PASSWORD}
+    jsonData:
+      implementation: prometheus
+      handleGrafanaManagedAlerts: true
+      tlsSkipVerify: true
+    editable: true

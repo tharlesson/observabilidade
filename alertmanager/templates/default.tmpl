@@ -1,0 +1,38 @@
+﻿{{ define "email.subject" }}
+[{{ .Status | toUpper }}] {{ .CommonLabels.alertname }} ({{ .CommonLabels.severity }})
+{{ end }}
+
+{{ define "email.html" }}
+<h3>{{ .CommonLabels.alertname }} - {{ .Status | toUpper }}</h3>
+<p><b>Environment:</b> {{ .CommonLabels.environment }}<br/>
+<b>Cluster:</b> {{ .CommonLabels.cluster }}<br/>
+<b>Service:</b> {{ .CommonLabels.service }}<br/>
+<b>Namespace:</b> {{ .CommonLabels.namespace }}<br/>
+<b>Team:</b> {{ .CommonLabels.team }}<br/>
+<b>Severity:</b> {{ .CommonLabels.severity }}</p>
+<ul>
+{{ range .Alerts }}
+  <li><b>{{ .Labels.instance }}</b> - {{ .Annotations.summary }}<br/>
+  {{ .Annotations.description }}<br/>
+  {{ if .Annotations.runbook_url }}Runbook: <a href="{{ .Annotations.runbook_url }}">{{ .Annotations.runbook_url }}</a>{{ end }}
+  </li>
+{{ end }}
+</ul>
+{{ end }}
+
+{{ define "slack.title" }}
+[{{ .Status | toUpper }}][{{ .CommonLabels.severity }}] {{ .CommonLabels.alertname }}
+{{ end }}
+
+{{ define "slack.text" }}
+*Environment:* {{ .CommonLabels.environment }}
+*Cluster:* {{ .CommonLabels.cluster }}
+*Service:* {{ .CommonLabels.service }}
+*Namespace:* {{ .CommonLabels.namespace }}
+*Team:* {{ .CommonLabels.team }}
+{{ range .Alerts }}
+• *Summary:* {{ .Annotations.summary }}
+  *Description:* {{ .Annotations.description }}
+  {{ if .Annotations.runbook_url }}*Runbook:* {{ .Annotations.runbook_url }}{{ end }}
+{{ end }}
+{{ end }}

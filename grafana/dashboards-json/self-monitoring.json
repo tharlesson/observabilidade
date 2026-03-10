@@ -1,0 +1,86 @@
+﻿{
+  "annotations": { "list": [] },
+  "editable": true,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
+      "id": 1,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "values": false } },
+      "targets": [
+        { "editorMode": "code", "expr": "up{job=\"prometheus\"}", "refId": "A" }
+      ],
+      "title": "Prometheus Up",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 0 },
+      "id": 2,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "values": false } },
+      "targets": [
+        { "editorMode": "code", "expr": "up{job=\"alertmanager\"}", "refId": "A" }
+      ],
+      "title": "Alertmanager Up",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 0 },
+      "id": 3,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "values": false } },
+      "targets": [
+        { "editorMode": "code", "expr": "up{job=\"grafana\"}", "refId": "A" }
+      ],
+      "title": "Grafana Up",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": { "unit": "ops" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "id": 4,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(prometheus_tsdb_head_samples_appended_total[5m])",
+          "legendFormat": "samples appended",
+          "refId": "A"
+        }
+      ],
+      "title": "Prometheus Ingestion Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "id": 5,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(otelcol_exporter_send_failed_metric_points[5m])",
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "OTel Export Failures",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": ["self-monitoring", "prometheus", "grafana", "alertmanager", "otel"],
+  "templating": { "list": [] },
+  "time": { "from": "now-6h", "to": "now" },
+  "title": "Observability Stack Health",
+  "uid": "self-monitoring",
+  "version": 1
+}

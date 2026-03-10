@@ -1,0 +1,41 @@
+﻿- job_name: blackbox-http
+  metrics_path: /probe
+  params:
+    module: [http_2xx]
+  file_sd_configs:
+    - files:
+        - /etc/prometheus/targets/blackbox-http-targets.yml
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: blackbox-exporter:9115
+    - target_label: job
+      replacement: blackbox-http
+    - target_label: team
+      replacement: platform
+    - target_label: service
+      replacement: blackbox
+
+- job_name: blackbox-tcp
+  metrics_path: /probe
+  params:
+    module: [tcp_connect]
+  file_sd_configs:
+    - files:
+        - /etc/prometheus/targets/blackbox-tcp-targets.yml
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: blackbox-exporter:9115
+    - target_label: job
+      replacement: blackbox-tcp
+    - target_label: team
+      replacement: platform
+    - target_label: service
+      replacement: blackbox

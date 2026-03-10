@@ -1,0 +1,15 @@
+﻿- targets:
+    - https://example.com
+  labels:
+    environment: dev
+    cluster: external
+    namespace: external
+    team: platform
+
+- targets:
+    - https://api.example.com/health
+  labels:
+    environment: dev
+    cluster: external
+    namespace: external
+    team: platform

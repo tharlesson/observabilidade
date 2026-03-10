@@ -1,0 +1,78 @@
+﻿groups:
+  - name: ecs-service-alerts
+    interval: 30s
+    rules:
+      - alert: ECSServiceRunningTaskMismatch
+        expr: aws_ecs_service_desired_task_count - aws_ecs_service_running_task_count > 0
+        for: 10m
+        labels:
+          severity: critical
+          team: platform
+          service: ecs
+          namespace: infrastructure
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster_name }}"
+        annotations:
+          summary: "ECS service running task mismatch"
+          description: "Service {{ $labels.service_name }} has fewer running tasks than desired for 10m."
+          runbook_url: "https://example.local/runbooks/ecs-running-task-mismatch"
+
+      - alert: ECSServiceHighCPU
+        expr: aws_ecs_service_cpu_utilization_average > 85
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          service: ecs
+          namespace: infrastructure
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster_name }}"
+        annotations:
+          summary: "High ECS service CPU"
+          description: "ECS service {{ $labels.service_name }} CPU utilization > 85% for 10m."
+          runbook_url: "https://example.local/runbooks/ecs-high-cpu"
+
+      - alert: ECSServiceHighMemory
+        expr: aws_ecs_service_memory_utilization_average > 90
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          service: ecs
+          namespace: infrastructure
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster_name }}"
+        annotations:
+          summary: "High ECS service memory"
+          description: "ECS service {{ $labels.service_name }} memory utilization > 90% for 10m."
+          runbook_url: "https://example.local/runbooks/ecs-high-memory"
+
+      - alert: ECSServiceHighErrorRate
+        expr: sum by(service, environment, cluster, team) (rate(http_server_requests_total{service!="",status_code=~"5.."}[5m])) / sum by(service, environment, cluster, team) (rate(http_server_requests_total{service!=""}[5m])) > 0.05
+        for: 10m
+        labels:
+          severity: critical
+          team: platform
+          service: app
+          namespace: application
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "High HTTP 5xx error rate for ECS workload"
+          description: "Service {{ $labels.service }} has error rate above 5% for 10m."
+          runbook_url: "https://example.local/runbooks/app-high-error-rate"
+
+      - alert: ECSServiceHighLatencyP95
+        expr: histogram_quantile(0.95, sum by (le, service, environment, cluster, team) (rate(http_server_duration_seconds_bucket{service!=""}[5m]))) > 1.5
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          service: app
+          namespace: application
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "High p95 latency for ECS workload"
+          description: "Service {{ $labels.service }} p95 latency is above 1.5s for 10m."
+          runbook_url: "https://example.local/runbooks/app-high-latency"

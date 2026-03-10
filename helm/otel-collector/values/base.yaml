@@ -1,0 +1,157 @@
+﻿mode: daemonset
+
+image:
+  repository: public.ecr.aws/aws-observability/aws-otel-collector
+  tag: v0.43.0
+  pullPolicy: IfNotPresent
+
+nameOverride: adot-collector
+fullnameOverride: adot-collector
+
+serviceAccount:
+  create: false
+  name: adot-collector
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    cpu: 1
+    memory: 1Gi
+
+podLabels:
+  team: platform
+  service: adot-collector
+
+extraEnvs:
+  - name: ENVIRONMENT
+    value: dev
+  - name: CLUSTER
+    value: eks
+  - name: TEAM
+    value: platform
+  - name: AMP_REMOTE_WRITE_URL
+    value: ${PROMETHEUS_REMOTE_WRITE_URL}
+  - name: AWS_REGION
+    value: ${PROMETHEUS_REMOTE_WRITE_SIGV4_REGION}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  fsGroup: 10001
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
+
+ports:
+  metrics:
+    enabled: true
+    containerPort: 8888
+    servicePort: 8888
+    protocol: TCP
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 13133
+  initialDelaySeconds: 20
+  periodSeconds: 30
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 13133
+  initialDelaySeconds: 10
+  periodSeconds: 15
+
+tolerations:
+  - operator: Exists
+
+config:
+  extensions:
+    health_check:
+      endpoint: 0.0.0.0:13133
+    pprof:
+      endpoint: 0.0.0.0:1777
+    zpages:
+      endpoint: 0.0.0.0:55679
+    sigv4auth:
+      region: ${PROMETHEUS_REMOTE_WRITE_SIGV4_REGION}
+      service: aps
+
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+    kubeletstats:
+      collection_interval: 30s
+      auth_type: serviceAccount
+      endpoint: https://${env:K8S_NODE_NAME}:10250
+      insecure_skip_verify: true
+    k8s_cluster:
+      collection_interval: 30s
+      auth_type: serviceAccount
+
+  processors:
+    memory_limiter:
+      check_interval: 1s
+      limit_mib: 700
+      spike_limit_mib: 200
+    k8sattributes:
+      auth_type: serviceAccount
+      passthrough: false
+      extract:
+        metadata:
+          - k8s.namespace.name
+          - k8s.pod.name
+          - k8s.pod.uid
+          - k8s.node.name
+          - k8s.deployment.name
+    resource:
+      attributes:
+        - key: environment
+          action: upsert
+          value: ${env:ENVIRONMENT}
+        - key: cluster
+          action: upsert
+          value: ${env:CLUSTER}
+        - key: team
+          action: upsert
+          value: ${env:TEAM}
+    batch:
+      send_batch_size: 2048
+      timeout: 10s
+
+  exporters:
+    prometheusremotewrite:
+      endpoint: ${env:AMP_REMOTE_WRITE_URL}
+      auth:
+        authenticator: sigv4auth
+      resource_to_telemetry_conversion:
+        enabled: true
+      retry_on_failure:
+        enabled: true
+      queue_config:
+        enabled: true
+        num_consumers: 4
+        queue_size: 10000
+    logging:
+      loglevel: info
+
+  service:
+    extensions: [health_check, pprof, zpages, sigv4auth]
+    telemetry:
+      metrics:
+        address: 0.0.0.0:8888
+    pipelines:
+      metrics:
+        receivers: [otlp, kubeletstats, k8s_cluster]
+        processors: [memory_limiter, k8sattributes, resource, batch]
+        exporters: [prometheusremotewrite, logging]

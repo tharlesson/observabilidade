@@ -1,0 +1,22 @@
+﻿apiVersion: 1
+
+policies:
+  - orgId: 1
+    receiver: cp-teams-info
+    group_by:
+      - alertname
+      - environment
+      - cluster
+      - service
+      - namespace
+      - severity
+    routes:
+      - receiver: cp-slack-critical
+        object_matchers:
+          - [severity, =, critical]
+      - receiver: cp-email-warning
+        object_matchers:
+          - [severity, =, warning]
+      - receiver: cp-teams-info
+        object_matchers:
+          - [severity, =, info]

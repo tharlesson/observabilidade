@@ -1,0 +1,24 @@
+﻿- job_name: node-exporter
+  ec2_sd_configs:
+    - region: ${AWS_REGION}
+      port: 9100
+      filters:
+        - name: tag:observability
+          values: ["enabled"]
+  relabel_configs:
+    - source_labels: [__meta_ec2_private_ip]
+      regex: (.+)
+      replacement: ${1}:9100
+      target_label: __address__
+    - source_labels: [__meta_ec2_tag_Name]
+      target_label: instance
+    - source_labels: [__meta_ec2_tag_environment]
+      target_label: environment
+    - source_labels: [__meta_ec2_tag_cluster]
+      target_label: cluster
+    - source_labels: [__meta_ec2_tag_team]
+      target_label: team
+    - target_label: service
+      replacement: ec2
+    - target_label: namespace
+      replacement: infrastructure

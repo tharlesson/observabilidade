@@ -1,0 +1,12 @@
+﻿extraEnvs:
+  - name: ENVIRONMENT
+    value: prod
+  - name: CLUSTER
+    value: eks-prod
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 2
+    memory: 2Gi

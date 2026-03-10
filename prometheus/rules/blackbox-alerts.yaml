@@ -1,0 +1,48 @@
+﻿groups:
+  - name: blackbox-alerts
+    interval: 30s
+    rules:
+      - alert: BlackboxEndpointDown
+        expr: probe_success{job="blackbox-http"} == 0
+        for: 3m
+        labels:
+          severity: critical
+          team: platform
+          service: blackbox
+          namespace: external
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "Endpoint is down"
+          description: "Blackbox probe failed for {{ $labels.instance }}."
+          runbook_url: "https://example.local/runbooks/blackbox-endpoint-down"
+
+      - alert: BlackboxHighLatency
+        expr: probe_duration_seconds{job=~"blackbox-http|blackbox-tcp"} > 1.5
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          service: blackbox
+          namespace: external
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "Endpoint latency high"
+          description: "Probe latency is above 1.5s for {{ $labels.instance }}."
+          runbook_url: "https://example.local/runbooks/blackbox-high-latency"
+
+      - alert: BlackboxCertificateExpiringSoon
+        expr: (probe_ssl_earliest_cert_expiry - time()) < 14 * 24 * 3600
+        for: 30m
+        labels:
+          severity: warning
+          team: platform
+          service: blackbox
+          namespace: external
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "TLS certificate expiring soon"
+          description: "Certificate for {{ $labels.instance }} expires in less than 14 days."
+          runbook_url: "https://example.local/runbooks/blackbox-cert-expiry"

@@ -1,0 +1,6 @@
+﻿bucket         = "replace-with-terraform-state-bucket"
+key            = "observability/prod/terraform.tfstate"
+region         = "us-east-1"
+dynamodb_table = "replace-with-lock-table"
+encrypt        = true
+

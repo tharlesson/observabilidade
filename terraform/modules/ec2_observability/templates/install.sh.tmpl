@@ -1,0 +1,125 @@
+﻿#!/usr/bin/env bash
+set -euo pipefail
+
+NODE_EXPORTER_VERSION="${node_exporter_version}"
+OTELCOL_VERSION="${otelcol_version}"
+REMOTE_WRITE_ENDPOINT="${remote_write_endpoint}"
+COLLECTOR_CONFIG_S3_URI="${collector_config_s3}"
+
+export DEBIAN_FRONTEND=noninteractive
+
+if command -v apt-get >/dev/null 2>&1; then
+  apt-get update
+  apt-get install -y curl tar wget jq ca-certificates unzip
+elif command -v yum >/dev/null 2>&1; then
+  yum install -y curl tar wget jq ca-certificates unzip
+fi
+
+id -u node_exporter >/dev/null 2>&1 || useradd --no-create-home --shell /usr/sbin/nologin node_exporter
+
+curl -fsSL -o /tmp/node_exporter.tar.gz \
+  "https://github.com/prometheus/node_exporter/releases/download/v${NODE_EXPORTER_VERSION}/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64.tar.gz"
+
+tar -xzf /tmp/node_exporter.tar.gz -C /tmp
+install -m 0755 "/tmp/node_exporter-${NODE_EXPORTER_VERSION}.linux-amd64/node_exporter" /usr/local/bin/node_exporter
+
+cat >/etc/systemd/system/node_exporter.service <<'EOF'
+[Unit]
+Description=Prometheus Node Exporter
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+ExecStart=/usr/local/bin/node_exporter --collector.systemd --collector.processes
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+id -u otelcol >/dev/null 2>&1 || useradd --no-create-home --shell /usr/sbin/nologin otelcol
+mkdir -p /etc/otelcol /var/lib/otelcol
+chown -R otelcol:otelcol /etc/otelcol /var/lib/otelcol
+
+curl -fsSL -o /tmp/otelcol-contrib.tar.gz \
+  "https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v${OTELCOL_VERSION}/otelcol-contrib_${OTELCOL_VERSION}_linux_amd64.tar.gz"
+
+tar -xzf /tmp/otelcol-contrib.tar.gz -C /tmp
+install -m 0755 /tmp/otelcol-contrib /usr/local/bin/otelcol-contrib
+
+if [[ -n "$COLLECTOR_CONFIG_S3_URI" ]]; then
+  if command -v aws >/dev/null 2>&1; then
+    aws s3 cp "$COLLECTOR_CONFIG_S3_URI" /etc/otelcol/config.yaml
+  else
+    echo "awscli not installed; skipping S3 collector config download" >&2
+  fi
+else
+  cat >/etc/otelcol/config.yaml <<EOF
+receivers:
+  hostmetrics:
+    collection_interval: 30s
+    scrapers:
+      cpu: {}
+      memory: {}
+      filesystem: {}
+      disk: {}
+      network: {}
+      process: {}
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 512
+  batch:
+    timeout: 10s
+    send_batch_size: 2048
+  resource:
+    attributes:
+      - key: environment
+        value: "${environment}"
+        action: upsert
+      - key: cluster
+        value: "${cluster_name}"
+        action: upsert
+      - key: team
+        value: "${team}"
+        action: upsert
+
+exporters:
+  prometheusremotewrite:
+    endpoint: "$REMOTE_WRITE_ENDPOINT"
+
+service:
+  pipelines:
+    metrics:
+      receivers: [hostmetrics]
+      processors: [memory_limiter, batch, resource]
+      exporters: [prometheusremotewrite]
+EOF
+fi
+
+cat >/etc/systemd/system/otelcol.service <<'EOF'
+[Unit]
+Description=OpenTelemetry Collector Contrib
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=otelcol
+Group=otelcol
+Type=simple
+ExecStart=/usr/local/bin/otelcol-contrib --config=/etc/otelcol/config.yaml
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable --now node_exporter
+systemctl enable --now otelcol

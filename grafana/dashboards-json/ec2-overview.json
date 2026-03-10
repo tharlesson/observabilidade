@@ -1,0 +1,245 @@
+﻿{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-central"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "100 - (avg by(instance) (rate(node_cpu_seconds_total{mode=\"idle\",environment=~\"$environment\",cluster=~\"$cluster\"}[5m])) * 100)",
+          "legendFormat": "{{instance}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Usage (%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-central"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "(1 - (node_memory_MemAvailable_bytes{environment=~\"$environment\",cluster=~\"$cluster\"} / node_memory_MemTotal_bytes{environment=~\"$environment\",cluster=~\"$cluster\"})) * 100",
+          "legendFormat": "{{instance}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Memory Usage (%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-central"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "(1 - (node_filesystem_avail_bytes{fstype!~\"tmpfs|overlay\",mountpoint=\"/\",environment=~\"$environment\",cluster=~\"$cluster\"} / node_filesystem_size_bytes{fstype!~\"tmpfs|overlay\",mountpoint=\"/\",environment=~\"$environment\",cluster=~\"$cluster\"})) * 100",
+          "legendFormat": "{{instance}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Root FS Usage (%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-central"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "sum by(instance) (rate(node_network_receive_bytes_total{device!~\"lo\",environment=~\"$environment\",cluster=~\"$cluster\"}[5m]))",
+          "legendFormat": "rx {{instance}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "editorMode": "code",
+          "expr": "sum by(instance) (rate(node_network_transmit_bytes_total{device!~\"lo\",environment=~\"$environment\",cluster=~\"$cluster\"}[5m]))",
+          "legendFormat": "tx {{instance}}",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Network Throughput",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": ["ec2", "vm", "node_exporter"],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": ".*"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus-central"
+        },
+        "definition": "label_values(up, environment)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Environment",
+        "multi": false,
+        "name": "environment",
+        "query": "label_values(up, environment)",
+        "refresh": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": ".*"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus-central"
+        },
+        "definition": "label_values(up{environment=~\"$environment\"}, cluster)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Cluster",
+        "multi": false,
+        "name": "cluster",
+        "query": "label_values(up{environment=~\"$environment\"}, cluster)",
+        "refresh": 2,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "EC2 / VM Overview",
+  "uid": "ec2-overview",
+  "version": 1,
+  "weekStart": ""
+}

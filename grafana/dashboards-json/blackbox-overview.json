@@ -1,0 +1,80 @@
+﻿{
+  "annotations": { "list": [] },
+  "editable": true,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": { "unit": "percentunit" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "id": 1,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "avg_over_time(probe_success{job=~\"blackbox-http|blackbox-tcp\",environment=~\"$environment\"}[30m])",
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Availability (30m)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "id": 2,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "probe_duration_seconds{job=~\"blackbox-http|blackbox-tcp\",environment=~\"$environment\"}",
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Probe Duration",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": { "unit": "dtdurations" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
+      "id": 3,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "(probe_ssl_earliest_cert_expiry - time()) / 86400",
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "TLS Certificate Days to Expiry",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": ["blackbox", "availability"],
+  "templating": {
+    "list": [
+      {
+        "current": { "selected": false, "text": "All", "value": ".*" },
+        "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+        "includeAll": true,
+        "label": "Environment",
+        "name": "environment",
+        "query": "label_values(probe_success, environment)",
+        "refresh": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": { "from": "now-24h", "to": "now" },
+  "title": "Blackbox Availability",
+  "uid": "blackbox-overview",
+  "version": 1
+}

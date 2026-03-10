@@ -1,0 +1,20 @@
+﻿commonLabels:
+  environment: prod
+
+prometheus:
+  prometheusSpec:
+    retention: 30d
+    resources:
+      requests:
+        cpu: 1
+        memory: 4Gi
+      limits:
+        cpu: 4
+        memory: 8Gi
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 200Gi

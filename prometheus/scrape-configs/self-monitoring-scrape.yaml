@@ -1,0 +1,55 @@
+﻿- job_name: prometheus
+  scheme: https
+  tls_config:
+    insecure_skip_verify: true
+  basic_auth:
+    username: prom_admin
+    password: prom-admin-change-me
+  static_configs:
+    - targets: ["prometheus:9090"]
+      labels:
+        service: prometheus
+        namespace: observability
+        team: platform
+
+- job_name: alertmanager
+  scheme: https
+  tls_config:
+    insecure_skip_verify: true
+  basic_auth:
+    username: alert_admin
+    password: alert-admin-change-me
+  static_configs:
+    - targets: ["alertmanager:9093"]
+      labels:
+        service: alertmanager
+        namespace: observability
+        team: platform
+
+- job_name: grafana
+  scheme: https
+  tls_config:
+    insecure_skip_verify: true
+  metrics_path: /metrics
+  static_configs:
+    - targets: ["grafana:3000"]
+      labels:
+        service: grafana
+        namespace: observability
+        team: platform
+
+- job_name: otel-collector
+  static_configs:
+    - targets: ["otel-collector:8888"]
+      labels:
+        service: otel-collector
+        namespace: observability
+        team: platform
+
+- job_name: otel-collector-prometheus-exporter
+  static_configs:
+    - targets: ["otel-collector:9464"]
+      labels:
+        service: app-otlp
+        namespace: application
+        team: platform

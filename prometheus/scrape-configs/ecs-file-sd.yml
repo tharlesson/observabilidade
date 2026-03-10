@@ -1,0 +1,6 @@
+﻿- targets: []
+  labels:
+    environment: dev
+    cluster: ecs-dev
+    namespace: applications
+    team: platform

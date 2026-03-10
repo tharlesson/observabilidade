@@ -1,0 +1,13 @@
+﻿commonLabels:
+  environment: stage
+
+prometheus:
+  prometheusSpec:
+    retention: 15d
+    resources:
+      requests:
+        cpu: 500m
+        memory: 2Gi
+      limits:
+        cpu: 2
+        memory: 4Gi

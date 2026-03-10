@@ -1,0 +1,99 @@
+﻿fullnameOverride: kube-prometheus-stack
+
+commonLabels:
+  environment: dev
+  cluster: default
+  team: platform
+
+defaultRules:
+  create: true
+  labels:
+    team: platform
+    service: kubernetes
+  additionalRuleLabels:
+    environment: dev
+  rules:
+    kubeApiserverHistogram: true
+    kubeApiserverSlos: true
+
+alertmanager:
+  enabled: false
+
+grafana:
+  enabled: false
+
+kubeStateMetrics:
+  enabled: true
+
+nodeExporter:
+  enabled: true
+
+prometheusOperator:
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+prometheus:
+  enabled: true
+  service:
+    type: ClusterIP
+  prometheusSpec:
+    replicas: 1
+    enableAdminAPI: false
+    externalLabels:
+      environment: dev
+      cluster: default
+      team: platform
+      service: prometheus
+    retention: 15d
+    retentionSize: 40GB
+    walCompression: true
+    scrapeInterval: 30s
+    evaluationInterval: 30s
+    ruleSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+    resources:
+      requests:
+        cpu: 500m
+        memory: 2Gi
+      limits:
+        cpu: 2
+        memory: 4Gi
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+    remoteWrite:
+      - url: ${PROMETHEUS_REMOTE_WRITE_URL}
+        queue_config:
+          capacity: 10000
+          max_shards: 200
+          min_shards: 1
+          max_samples_per_send: 2000
+          batch_send_deadline: 5s
+        write_relabel_configs:
+          - source_labels: [__name__]
+            regex: "go_.*"
+            action: drop
+        sigv4:
+          region: ${PROMETHEUS_REMOTE_WRITE_SIGV4_REGION}
+
+  thanosService:
+    enabled: false
+
+kubeEtcd:
+  enabled: true
+
+kubeControllerManager:
+  enabled: true
+
+kubeScheduler:
+  enabled: true

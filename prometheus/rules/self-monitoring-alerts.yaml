@@ -1,0 +1,78 @@
+﻿groups:
+  - name: self-monitoring-alerts
+    interval: 30s
+    rules:
+      - alert: PrometheusTargetDown
+        expr: up{job="prometheus"} == 0
+        for: 3m
+        labels:
+          severity: critical
+          team: platform
+          service: prometheus
+          namespace: observability
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "Prometheus instance unreachable"
+          description: "Prometheus target {{ $labels.instance }} is down."
+          runbook_url: "https://example.local/runbooks/prometheus-down"
+
+      - alert: PrometheusRuleEvaluationSlow
+        expr: prometheus_rule_group_last_duration_seconds > (prometheus_rule_group_interval_seconds * 0.8)
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          service: prometheus
+          namespace: observability
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "Prometheus rule evaluation is slow"
+          description: "Rule group {{ $labels.rule_group }} in {{ $labels.file }} is close to interval budget."
+          runbook_url: "https://example.local/runbooks/prometheus-slow-rules"
+
+      - alert: AlertmanagerNotificationsFailing
+        expr: rate(alertmanager_notifications_failed_total[5m]) > 0
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          service: alertmanager
+          namespace: observability
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "Alertmanager notification failures detected"
+          description: "Alertmanager failed to send notifications in the last 5m."
+          runbook_url: "https://example.local/runbooks/alertmanager-notification-failures"
+
+      - alert: GrafanaDown
+        expr: up{job="grafana"} == 0
+        for: 5m
+        labels:
+          severity: critical
+          team: platform
+          service: grafana
+          namespace: observability
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "Grafana is down"
+          description: "Grafana target {{ $labels.instance }} is unavailable for 5m."
+          runbook_url: "https://example.local/runbooks/grafana-down"
+
+      - alert: OTelCollectorExportFailures
+        expr: rate(otelcol_exporter_send_failed_metric_points[5m]) > 0
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          service: otel-collector
+          namespace: observability
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "OpenTelemetry Collector exporter failures"
+          description: "Collector {{ $labels.instance }} has failed metric exports in last 5m."
+          runbook_url: "https://example.local/runbooks/otel-export-failures"

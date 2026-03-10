@@ -1,0 +1,18 @@
+﻿server:
+  port: ${PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      service: ${OTEL_SERVICE_NAME:sample-app-java}
+      environment: ${ENVIRONMENT:dev}
+      cluster: ${CLUSTER:local-lab}
+      team: ${TEAM:platform}

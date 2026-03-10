@@ -1,0 +1,127 @@
+﻿{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
+      "id": 1,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "orientation": "auto", "textMode": "auto" },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "sum(aws_ecs_service_running_task_count{environment=~\"$environment\",cluster_name=~\"$cluster\"})",
+          "refId": "A"
+        }
+      ],
+      "title": "Running Tasks",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 0 },
+      "id": 2,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "orientation": "auto", "textMode": "auto" },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "sum(aws_ecs_service_desired_task_count{environment=~\"$environment\",cluster_name=~\"$cluster\"})",
+          "refId": "A"
+        }
+      ],
+      "title": "Desired Tasks",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 0 },
+      "id": 3,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "orientation": "auto", "textMode": "auto" },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "avg(aws_ecs_service_cpu_utilization_average{environment=~\"$environment\",cluster_name=~\"$cluster\"})",
+          "refId": "A"
+        }
+      ],
+      "title": "Avg CPU Utilization",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "id": 4,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" }, "tooltip": { "mode": "single" } },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "aws_ecs_service_cpu_utilization_average{environment=~\"$environment\",cluster_name=~\"$cluster\"}",
+          "legendFormat": "{{service_name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU by Service",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "id": 5,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" }, "tooltip": { "mode": "single" } },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "aws_ecs_service_memory_utilization_average{environment=~\"$environment\",cluster_name=~\"$cluster\"}",
+          "legendFormat": "{{service_name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory by Service",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": ["ecs", "adot"],
+  "templating": {
+    "list": [
+      {
+        "current": { "selected": false, "text": "All", "value": ".*" },
+        "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+        "definition": "label_values(aws_ecs_service_running_task_count, environment)",
+        "includeAll": true,
+        "label": "Environment",
+        "name": "environment",
+        "query": "label_values(aws_ecs_service_running_task_count, environment)",
+        "refresh": 1,
+        "type": "query"
+      },
+      {
+        "current": { "selected": false, "text": "All", "value": ".*" },
+        "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+        "definition": "label_values(aws_ecs_service_running_task_count{environment=~\"$environment\"}, cluster_name)",
+        "includeAll": true,
+        "label": "Cluster",
+        "name": "cluster",
+        "query": "label_values(aws_ecs_service_running_task_count{environment=~\"$environment\"}, cluster_name)",
+        "refresh": 2,
+        "type": "query"
+      }
+    ]
+  },
+  "time": { "from": "now-6h", "to": "now" },
+  "title": "ECS Overview",
+  "uid": "ecs-overview",
+  "version": 1
+}

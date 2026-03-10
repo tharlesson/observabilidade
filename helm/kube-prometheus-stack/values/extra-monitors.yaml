@@ -1,0 +1,34 @@
+﻿prometheus:
+  additionalServiceMonitors:
+    - name: sample-app-servicemonitor
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: sample-app
+      namespaceSelector:
+        any: true
+      endpoints:
+        - port: metrics
+          path: /metrics
+          interval: 30s
+          relabelings:
+            - targetLabel: team
+              replacement: platform
+            - targetLabel: service
+              replacement: sample-app
+
+  additionalPodMonitors:
+    - name: sample-app-podmonitor
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: sample-app
+      namespaceSelector:
+        any: true
+      podMetricsEndpoints:
+        - port: metrics
+          path: /metrics
+          interval: 30s
+          relabelings:
+            - targetLabel: team
+              replacement: platform
+            - targetLabel: service
+              replacement: sample-app

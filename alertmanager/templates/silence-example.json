@@ -1,0 +1,20 @@
+﻿# Example silence payload for Alertmanager API v2.
+# curl -XPOST http://alertmanager:9093/api/v2/silences -H "Content-Type: application/json" -d @alertmanager/templates/silence-example.json
+{
+  "matchers": [
+    {
+      "name": "environment",
+      "value": "prod",
+      "isRegex": false
+    },
+    {
+      "name": "service",
+      "value": "eks",
+      "isRegex": false
+    }
+  ],
+  "startsAt": "2026-03-10T01:00:00Z",
+  "endsAt": "2026-03-10T03:00:00Z",
+  "createdBy": "sre-team",
+  "comment": "planned maintenance"
+}

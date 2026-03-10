@@ -1,0 +1,109 @@
+﻿{
+  "annotations": { "list": [] },
+  "editable": true,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
+      "id": 1,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "values": false }, "textMode": "auto" },
+      "targets": [
+        { "editorMode": "code", "expr": "count(kube_node_info{environment=~\"$environment\",cluster=~\"$cluster\"})", "refId": "A" }
+      ],
+      "title": "Nodes",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 0 },
+      "id": 2,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "values": false }, "textMode": "auto" },
+      "targets": [
+        { "editorMode": "code", "expr": "sum(kube_pod_status_phase{phase=\"Running\",environment=~\"$environment\",cluster=~\"$cluster\"})", "refId": "A" }
+      ],
+      "title": "Running Pods",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 0 },
+      "id": 3,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "values": false }, "textMode": "auto" },
+      "targets": [
+        { "editorMode": "code", "expr": "sum(kube_pod_status_phase{phase=\"Pending\",environment=~\"$environment\",cluster=~\"$cluster\"})", "refId": "A" }
+      ],
+      "title": "Pending Pods",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "id": 4,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "sum by(node) (rate(container_cpu_usage_seconds_total{container!=\"\",environment=~\"$environment\",cluster=~\"$cluster\"}[5m]))",
+          "legendFormat": "{{node}}",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU by Node",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "id": 5,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "kube_deployment_spec_replicas{environment=~\"$environment\",cluster=~\"$cluster\"} - kube_deployment_status_replicas_available{environment=~\"$environment\",cluster=~\"$cluster\"}",
+          "legendFormat": "{{namespace}}/{{deployment}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Deployment Replica Gap",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": ["eks", "kubernetes", "kube-state-metrics"],
+  "templating": {
+    "list": [
+      {
+        "current": { "selected": false, "text": "All", "value": ".*" },
+        "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+        "includeAll": true,
+        "label": "Environment",
+        "name": "environment",
+        "query": "label_values(kube_node_info, environment)",
+        "refresh": 1,
+        "type": "query"
+      },
+      {
+        "current": { "selected": false, "text": "All", "value": ".*" },
+        "datasource": { "type": "prometheus", "uid": "prometheus-central" },
+        "includeAll": true,
+        "label": "Cluster",
+        "name": "cluster",
+        "query": "label_values(kube_node_info{environment=~\"$environment\"}, cluster)",
+        "refresh": 2,
+        "type": "query"
+      }
+    ]
+  },
+  "time": { "from": "now-6h", "to": "now" },
+  "title": "EKS Overview",
+  "uid": "eks-overview",
+  "version": 1
+}

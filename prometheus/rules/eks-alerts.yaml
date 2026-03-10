@@ -1,0 +1,78 @@
+﻿groups:
+  - name: eks-cluster-alerts
+    interval: 30s
+    rules:
+      - alert: EKSNodeNotReady
+        expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+        for: 10m
+        labels:
+          severity: critical
+          team: platform
+          service: eks
+          namespace: infrastructure
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "EKS node not Ready"
+          description: "Node {{ $labels.node }} is not Ready for 10m."
+          runbook_url: "https://example.local/runbooks/eks-node-not-ready"
+
+      - alert: EKSPodCrashLoopBackOff
+        expr: kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff"} > 0
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          service: eks
+          namespace: "{{ $labels.namespace }}"
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "Pod in CrashLoopBackOff"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is CrashLoopBackOff."
+          runbook_url: "https://example.local/runbooks/eks-pod-crashloop"
+
+      - alert: EKSPodOOMKilled
+        expr: increase(kube_pod_container_status_restarts_total[10m]) > 2 and on(namespace,pod,container) kube_pod_container_status_last_terminated_reason{reason="OOMKilled"} == 1
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+          service: eks
+          namespace: "{{ $labels.namespace }}"
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "Container restarted due to OOMKill"
+          description: "Container {{ $labels.container }} in {{ $labels.namespace }}/{{ $labels.pod }} has repeated OOMKilled events."
+          runbook_url: "https://example.local/runbooks/eks-oomkilled"
+
+      - alert: EKSPendingPodsHigh
+        expr: sum by(namespace, environment, cluster, team) (kube_pod_status_phase{phase="Pending"}) > 10
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+          service: eks
+          namespace: "{{ $labels.namespace }}"
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "High number of pending pods"
+          description: "Namespace {{ $labels.namespace }} has more than 10 pods in Pending state."
+          runbook_url: "https://example.local/runbooks/eks-pending-pods"
+
+      - alert: EKSDeploymentReplicaMismatch
+        expr: kube_deployment_spec_replicas - kube_deployment_status_replicas_available > 0
+        for: 15m
+        labels:
+          severity: critical
+          team: platform
+          service: eks
+          namespace: "{{ $labels.namespace }}"
+          environment: "{{ $labels.environment }}"
+          cluster: "{{ $labels.cluster }}"
+        annotations:
+          summary: "Deployment replica mismatch"
+          description: "Deployment {{ $labels.deployment }} has unavailable replicas for more than 15m."
+          runbook_url: "https://example.local/runbooks/eks-replicas-mismatch"

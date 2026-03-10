@@ -1,0 +1,106 @@
+﻿global:
+  resolve_timeout: 5m
+  smtp_smarthost: ${SMTP_SMARTHOST}
+  smtp_from: ${SMTP_FROM}
+  smtp_auth_username: ${SMTP_AUTH_USERNAME}
+  smtp_auth_password: ${SMTP_AUTH_PASSWORD}
+
+templates:
+  - /etc/alertmanager/templates/*.tmpl
+
+route:
+  receiver: default-info
+  group_by: [alertname, environment, cluster, service, namespace, severity]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+
+  routes:
+    - matchers:
+        - severity="critical"
+      receiver: critical-notifications
+      continue: true
+      group_wait: 10s
+      repeat_interval: 30m
+
+    - matchers:
+        - severity="warning"
+      receiver: warning-notifications
+      continue: true
+      repeat_interval: 2h
+
+    - matchers:
+        - severity="info"
+      receiver: default-info
+      continue: false
+      repeat_interval: 12h
+
+inhibit_rules:
+  - source_matchers:
+      - severity="critical"
+    target_matchers:
+      - severity=~"warning|info"
+    equal: [alertname, service, namespace, environment, cluster]
+
+  - source_matchers:
+      - alertname="BlackboxEndpointDown"
+    target_matchers:
+      - alertname="BlackboxHighLatency"
+    equal: [instance, service, environment]
+
+receivers:
+  - name: default-info
+    slack_configs:
+      - send_resolved: true
+        channel: '#observability-info'
+        api_url: ${SLACK_WEBHOOK_URL}
+        title: '{{ template "slack.title" . }}'
+        text: '{{ template "slack.text" . }}'
+    email_configs:
+      - send_resolved: true
+        to: ${ALERT_EMAIL_TO}
+        headers:
+          Subject: '{{ template "email.subject" . }}'
+        html: '{{ template "email.html" . }}'
+
+  - name: warning-notifications
+    slack_configs:
+      - send_resolved: true
+        channel: '#observability-warning'
+        api_url: ${SLACK_WEBHOOK_URL}
+        title: '{{ template "slack.title" . }}'
+        text: '{{ template "slack.text" . }}'
+    email_configs:
+      - send_resolved: true
+        to: ${ALERT_EMAIL_TO}
+        headers:
+          Subject: '[WARNING] {{ template "email.subject" . }}'
+        html: '{{ template "email.html" . }}'
+
+  - name: critical-notifications
+    slack_configs:
+      - send_resolved: true
+        channel: '#observability-critical'
+        api_url: ${SLACK_WEBHOOK_URL}
+        title: '{{ template "slack.title" . }}'
+        text: '{{ template "slack.text" . }}'
+    email_configs:
+      - send_resolved: true
+        to: ${ALERT_EMAIL_TO}
+        headers:
+          Subject: '[CRITICAL] {{ template "email.subject" . }}'
+        html: '{{ template "email.html" . }}'
+    webhook_configs:
+      - send_resolved: true
+        url: ${TEAMS_WEBHOOK_URL}
+        max_alerts: 10
+        http_config:
+          follow_redirects: true
+
+mute_time_intervals:
+  - name: maintenance-window
+    time_intervals:
+      - weekdays: ["saturday", "sunday"]
+        times:
+          - start_time: '01:00'
+            end_time: '05:00'

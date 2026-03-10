@@ -1,0 +1,15 @@
+﻿- targets:
+    - db.example.com:5432
+  labels:
+    environment: dev
+    cluster: external
+    namespace: external
+    team: platform
+
+- targets:
+    - redis.example.com:6379
+  labels:
+    environment: dev
+    cluster: external
+    namespace: external
+    team: platform

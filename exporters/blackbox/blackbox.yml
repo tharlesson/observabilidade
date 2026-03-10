@@ -1,0 +1,37 @@
+﻿modules:
+  http_2xx:
+    prober: http
+    timeout: 10s
+    http:
+      preferred_ip_protocol: ip4
+      valid_http_versions: ["HTTP/1.1", "HTTP/2"]
+      valid_status_codes: [200, 201, 202, 204, 301, 302]
+      method: GET
+      fail_if_ssl: false
+      fail_if_not_ssl: false
+      tls_config:
+        insecure_skip_verify: false
+
+  https_strict:
+    prober: http
+    timeout: 10s
+    http:
+      preferred_ip_protocol: ip4
+      method: GET
+      fail_if_not_ssl: true
+      tls_config:
+        insecure_skip_verify: false
+
+  tcp_connect:
+    prober: tcp
+    timeout: 10s
+    tcp:
+      preferred_ip_protocol: ip4
+
+  tls_cert:
+    prober: tcp
+    timeout: 10s
+    tcp:
+      tls: true
+      tls_config:
+        insecure_skip_verify: false

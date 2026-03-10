@@ -1,0 +1,22 @@
+﻿manager:
+  collectorImage:
+    repository: public.ecr.aws/aws-observability/aws-otel-collector
+    tag: v0.43.0
+
+admissionWebhooks:
+  create: true
+  certManager:
+    enabled: false
+
+autoInstrumentation:
+  enabled: true
+
+rbac:
+  create: true
+
+serviceMonitor:
+  enabled: true
+
+podLabels:
+  team: platform
+  service: opentelemetry-operator
