@@ -1,4 +1,4 @@
-﻿# Guia de resposta: Node EKS NotReady
+# Guia de resposta: Node EKS NotReady
 
 ## Alerta
 `EKSNodeNotReady`

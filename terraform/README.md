@@ -1,4 +1,4 @@
-﻿# Estrutura Terraform
+# Estrutura Terraform
 
 - `modules/`: modulos reutilizaveis para backend, EKS, ECS e observabilidade em EC2.
 - `environments/dev|stage|prod`: composicao por ambiente com variaveis e backend remoto.

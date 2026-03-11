@@ -1,4 +1,4 @@
-﻿# Componente: Alertmanager OSS
+# Componente: Alertmanager OSS
 
 ## Finalidade
 

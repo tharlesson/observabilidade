@@ -1,4 +1,4 @@
-﻿- job_name: prometheus
+- job_name: prometheus
   scheme: https
   tls_config:
     insecure_skip_verify: true

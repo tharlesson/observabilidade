@@ -1,4 +1,4 @@
-﻿groups:
+groups:
   - name: eks-cluster-alerts
     interval: 30s
     rules:

@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "sample-app-node",
   "version": "1.0.0",
   "description": "Sample Node.js app instrumented with OpenTelemetry and /metrics endpoint",

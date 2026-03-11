@@ -1,4 +1,4 @@
-﻿# Guia de resposta: CPU alta no EC2
+# Guia de resposta: CPU alta no EC2
 
 ## Alerta
 `EC2HighCPUUsage`

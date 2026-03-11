@@ -1,4 +1,4 @@
-﻿# Guia de resposta: Endpoint Blackbox indisponivel
+# Guia de resposta: Endpoint Blackbox indisponivel
 
 ## Alerta
 `BlackboxEndpointDown`

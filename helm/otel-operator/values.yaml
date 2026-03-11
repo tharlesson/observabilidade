@@ -1,4 +1,4 @@
-﻿manager:
+manager:
   collectorImage:
     repository: public.ecr.aws/aws-observability/aws-otel-collector
     tag: v0.43.0

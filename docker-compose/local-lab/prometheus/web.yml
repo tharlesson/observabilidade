@@ -1,4 +1,4 @@
-﻿# Replace values before first start (use scripts/bootstrap-local-lab.sh to automate).
+# Replace values before first start (use scripts/bootstrap-local-lab.sh to automate).
 basic_auth_users:
   prom_admin: $2y$12$replace_with_bcrypt_hash
 

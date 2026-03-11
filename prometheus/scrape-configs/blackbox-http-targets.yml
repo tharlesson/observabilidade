@@ -1,4 +1,4 @@
-﻿- targets:
+- targets:
     - https://example.com
   labels:
     environment: dev

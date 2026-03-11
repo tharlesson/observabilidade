@@ -1,4 +1,4 @@
-﻿# Componente: Grafana OSS
+# Componente: Grafana OSS
 
 ## Finalidade
 

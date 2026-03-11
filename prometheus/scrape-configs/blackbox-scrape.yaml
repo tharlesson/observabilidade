@@ -1,4 +1,4 @@
-﻿- job_name: blackbox-http
+- job_name: blackbox-http
   metrics_path: /probe
   params:
     module: [http_2xx]

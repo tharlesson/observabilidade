@@ -1,4 +1,4 @@
-﻿- job_name: ecs-prometheus-targets
+- job_name: ecs-prometheus-targets
   file_sd_configs:
     - files:
         - /etc/prometheus/targets/ecs-file-sd.yml

@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const client = require('prom-client');
 
 const { NodeSDK } = require('@opentelemetry/sdk-node');

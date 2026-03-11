@@ -1,4 +1,4 @@
-﻿extraEnvs:
+extraEnvs:
   - name: ENVIRONMENT
     value: stage
   - name: CLUSTER

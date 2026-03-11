@@ -1,4 +1,4 @@
-﻿# Prometheus web configuration for TLS and basic auth.
+# Prometheus web configuration for TLS and basic auth.
 # Generate bcrypt hash with: htpasswd -nBC 12 "prom_admin" | sed -e s/\$/\$\$/g
 basic_auth_users:
   prom_admin: ${PROMETHEUS_BASIC_AUTH_HASH}

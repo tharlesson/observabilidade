@@ -1,4 +1,4 @@
-﻿# Lista de validacao
+# Lista de validacao
 
 ## Infraestrutura
 

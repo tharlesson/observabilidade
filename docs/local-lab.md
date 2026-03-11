@@ -1,4 +1,4 @@
-﻿# Laboratorio local
+# Laboratorio local
 
 ## Pre-requisitos
 

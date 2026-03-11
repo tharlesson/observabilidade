@@ -1,4 +1,4 @@
-﻿# Guia de resposta: Pod em CrashLoopBackOff no EKS
+# Guia de resposta: Pod em CrashLoopBackOff no EKS
 
 ## Alerta
 `EKSPodCrashLoopBackOff`

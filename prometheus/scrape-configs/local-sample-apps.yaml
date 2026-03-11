@@ -1,4 +1,4 @@
-﻿- job_name: sample-apps
+- job_name: sample-apps
   scrape_interval: 15s
   static_configs:
     - targets: ["sample-app-node:8080", "sample-app-python:8080"]

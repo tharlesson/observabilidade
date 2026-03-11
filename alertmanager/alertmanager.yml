@@ -1,4 +1,4 @@
-﻿global:
+global:
   resolve_timeout: 5m
   smtp_smarthost: ${SMTP_SMARTHOST}
   smtp_from: ${SMTP_FROM}

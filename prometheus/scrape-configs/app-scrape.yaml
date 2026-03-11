@@ -1,4 +1,4 @@
-﻿- job_name: applications
+- job_name: applications
   kubernetes_sd_configs:
     - role: pod
   relabel_configs:

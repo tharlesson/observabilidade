@@ -1,4 +1,4 @@
-﻿# Exemplos de PromQL
+# Exemplos de PromQL
 
 ## EC2 / VM
 

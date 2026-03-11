@@ -1,4 +1,4 @@
-﻿# Guia de resposta: Divergencia de tarefas no ECS
+# Guia de resposta: Divergencia de tarefas no ECS
 
 ## Alerta
 `ECSServiceRunningTaskMismatch`

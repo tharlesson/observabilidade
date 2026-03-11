@@ -1,4 +1,4 @@
-﻿# Guia de resposta: Taxa alta de erro na aplicacao
+# Guia de resposta: Taxa alta de erro na aplicacao
 
 ## Alerta
 `AppHighErrorRate` / `ECSServiceHighErrorRate`

@@ -1,4 +1,4 @@
-﻿# App de exemplo em Java
+# App de exemplo em Java
 
 - Aplicacao Spring Boot com os endpoints:
   - `/`

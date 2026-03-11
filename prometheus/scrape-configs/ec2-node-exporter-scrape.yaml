@@ -1,4 +1,4 @@
-﻿- job_name: node-exporter
+- job_name: node-exporter
   ec2_sd_configs:
     - region: ${AWS_REGION}
       port: 9100

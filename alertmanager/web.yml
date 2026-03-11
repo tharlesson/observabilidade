@@ -1,4 +1,4 @@
-﻿# Alertmanager web configuration for TLS and basic auth.
+# Alertmanager web configuration for TLS and basic auth.
 basic_auth_users:
   alert_admin: ${ALERTMANAGER_BASIC_AUTH_HASH}
 

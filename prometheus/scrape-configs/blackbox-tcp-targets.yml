@@ -1,4 +1,4 @@
-﻿- targets:
+- targets:
     - db.example.com:5432
   labels:
     environment: dev

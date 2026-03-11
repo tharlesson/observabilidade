@@ -1,4 +1,4 @@
-﻿# Guia de resposta: Certificado proximo de expirar
+# Guia de resposta: Certificado proximo de expirar
 
 ## Alerta
 `BlackboxCertificateExpiringSoon`

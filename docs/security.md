@@ -1,4 +1,4 @@
-﻿# Baseline de seguranca
+# Baseline de seguranca
 
 ## Identidade e acesso
 

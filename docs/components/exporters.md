@@ -1,4 +1,4 @@
-﻿# Componente: Exportadores
+# Componente: Exportadores
 
 ## Finalidade
 

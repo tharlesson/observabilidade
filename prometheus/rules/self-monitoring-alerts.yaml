@@ -1,4 +1,4 @@
-﻿groups:
+groups:
   - name: self-monitoring-alerts
     interval: 30s
     rules:

@@ -1,4 +1,4 @@
-﻿# Example silence payload for Alertmanager API v2.
+# Example silence payload for Alertmanager API v2.
 # curl -XPOST http://alertmanager:9093/api/v2/silences -H "Content-Type: application/json" -d @alertmanager/templates/silence-example.json
 {
   "matchers": [

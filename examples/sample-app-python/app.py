@@ -1,4 +1,4 @@
-﻿import os
+import os
 import time
 from flask import Flask, Response, jsonify
 from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST

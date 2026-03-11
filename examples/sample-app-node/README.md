@@ -1,4 +1,4 @@
-﻿# App de exemplo em Node
+# App de exemplo em Node
 
 - Expoe `/metrics` no formato Prometheus.
 - Exporta traces/metricas para OTLP via gRPC.

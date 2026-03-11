@@ -1,4 +1,4 @@
-﻿# Guia de resposta: Disco do EC2 enchendo
+# Guia de resposta: Disco do EC2 enchendo
 
 ## Alerta
 `EC2DiskWillFillSoon`

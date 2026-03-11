@@ -1,4 +1,4 @@
-﻿param(
+param(
   [string]$PromPassword = "prom-admin-change-me",
   [string]$AlertPassword = "alert-admin-change-me"
 )

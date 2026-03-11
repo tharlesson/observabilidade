@@ -1,4 +1,4 @@
-﻿- targets: []
+- targets: []
   labels:
     environment: dev
     cluster: ecs-dev

@@ -1,4 +1,4 @@
-﻿# Guia de resposta: Prometheus indisponivel
+# Guia de resposta: Prometheus indisponivel
 
 ## Alerta
 `PrometheusTargetDown`

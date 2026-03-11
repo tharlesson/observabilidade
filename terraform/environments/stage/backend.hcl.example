@@ -1,4 +1,4 @@
-﻿bucket         = "replace-with-terraform-state-bucket"
+bucket         = "replace-with-terraform-state-bucket"
 key            = "observability/stage/terraform.tfstate"
 region         = "us-east-1"
 dynamodb_table = "replace-with-lock-table"

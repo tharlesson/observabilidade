@@ -1,4 +1,4 @@
-﻿groups:
+groups:
   - name: ec2-host-alerts
     interval: 30s
     rules:

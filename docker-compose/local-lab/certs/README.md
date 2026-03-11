@@ -1,4 +1,4 @@
-﻿Coloque aqui os arquivos TLS locais:
+Coloque aqui os arquivos TLS locais:
 - tls.crt
 - tls.key
 

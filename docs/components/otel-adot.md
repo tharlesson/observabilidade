@@ -1,4 +1,4 @@
-﻿# Componente: OpenTelemetry / ADOT
+# Componente: OpenTelemetry / ADOT
 
 ## Finalidade
 

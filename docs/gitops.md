@@ -1,4 +1,4 @@
-﻿# Fluxo GitOps
+# Fluxo GitOps
 
 ## Branching
 

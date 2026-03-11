@@ -1,4 +1,4 @@
-﻿groups:
+groups:
   - name: ecs-service-alerts
     interval: 30s
     rules:

@@ -1,4 +1,4 @@
-﻿fullnameOverride: kube-prometheus-stack
+fullnameOverride: kube-prometheus-stack
 
 commonLabels:
   environment: dev

@@ -1,4 +1,4 @@
-﻿# Componente: Prometheus
+# Componente: Prometheus
 
 ## Finalidade
 

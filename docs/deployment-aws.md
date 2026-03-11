@@ -1,4 +1,4 @@
-﻿# Deploy na AWS
+# Deploy na AWS
 
 ## Pre-requisitos
 

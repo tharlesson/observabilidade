@@ -1,4 +1,4 @@
-﻿# App de exemplo em Python
+# App de exemplo em Python
 
 - Aplicacao Flask com os endpoints:
   - `/`

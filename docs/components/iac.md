@@ -1,4 +1,4 @@
-﻿# Componente: Terraform + Helm
+# Componente: Terraform + Helm
 
 ## Finalidade
 

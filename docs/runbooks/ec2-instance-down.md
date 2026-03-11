@@ -1,4 +1,4 @@
-﻿# Guia de resposta: Instancia EC2 indisponivel
+# Guia de resposta: Instancia EC2 indisponivel
 
 ## Alerta
 `EC2InstanceDown`

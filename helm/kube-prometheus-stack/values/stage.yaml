@@ -1,4 +1,4 @@
-﻿commonLabels:
+commonLabels:
   environment: stage
 
 prometheus:

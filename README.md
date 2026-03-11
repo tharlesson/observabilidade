@@ -1,4 +1,4 @@
-﻿# Plataforma de Observabilidade AWS (IaC Pronta para Producao)
+# Plataforma de Observabilidade AWS (IaC Pronta para Producao)
 
 Plataforma de observabilidade como codigo para AWS, com suporte a:
 

@@ -1,4 +1,4 @@
-﻿{{ define "email.subject" }}
+{{ define "email.subject" }}
 [{{ .Status | toUpper }}] {{ .CommonLabels.alertname }} ({{ .CommonLabels.severity }})
 {{ end }}
 
