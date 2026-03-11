@@ -315,4 +315,31 @@ Arquivo: [`docs/checklist-validation.md`](docs/checklist-validation.md)
 - Integrar pipeline GitOps com aprovacao para `prod`.
 - Ajustar retencao e recursos conforme volume real de metricas.
 
+## Licenca
 
+Este projeto esta licenciado sob a Apache License 2.0. Consulte o arquivo `LICENSE` para mais detalhes.
+
+## Atribuicao
+
+Este projeto foi desenvolvido e publicado por **Tharlesson**.
+Caso voce utilize este material como base em ambientes internos, estudos, adaptacoes ou redistribuicoes, preserve os creditos de autoria e os avisos de licenca aplicaveis.
+
+## Creditos e Uso
+
+Este repositorio foi criado com foco em automacao, padronizacao operacional e melhoria da rotina de profissionais de SRE, DevOps, Cloud e Plataforma.
+
+Voce pode:
+- estudar
+- reutilizar
+- adaptar
+- evoluir este projeto dentro do seu contexto
+
+Ao reutilizar ou derivar este material:
+- mantenha os avisos de licenca
+- preserve os creditos de autoria quando aplicavel
+- documente alteracoes relevantes feitas sobre a base original
+
+## Autor
+
+**Tharlesson**  
+GitHub: https://github.com/tharlesson
